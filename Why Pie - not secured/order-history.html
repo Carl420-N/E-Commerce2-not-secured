@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order History - Why Pie? Bake Good And Treat</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Oswald:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #FDF5E6;
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    
+    /* Navbar Styles */
+    .navbar {
+      background: #8B4513;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.5rem;
+      color: #FFF8DC;
+    }
+    
+    .navbar ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .navbar a {
+      text-decoration: none;
+      color: #FFF8DC;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .navbar a:hover {
+      color: #FFD700;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .user-role {
+      background: #FFD700;
+      color: #8B4513;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    
+    #logout-btn {
+      background: #FFB74D;
+      color: #3E2723;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    
+    #logout-btn:hover {
+      background: #FFA726;
+    }
+    
+    /* Dashboard Header */
+    .dashboard-header {
+      background: linear-gradient(135deg, #8B4513, #A0522D);
+      color: #FFF8DC;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+    }
+    
+    .welcome-message {
+      text-align: center;
+    }
+    
+    .welcome-message h1 {
+      margin-bottom: 0.5rem;
+      font-size: 2.5rem;
+    }
+    
+    /* Order History Section */
+    .order-history-section {
+      background: #FAF0E6;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .order-history-section h2 {
+      margin-bottom: 1.5rem;
+      color: #8B4513;
+      border-bottom: 2px solid #8B4513;
+      padding-bottom: 0.5rem;
+    }
+    
+    .order-filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .filter-group label {
+      font-weight: 500;
+      color: #8B4513;
+      font-size: 0.9rem;
+    }
+    
+    .filter-group select,
+    .filter-group input {
+      padding: 0.5rem;
+      border: 1px solid #E6D7C1;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      background-color: #FFFEFC;
+    }
+    
+    .order-item {
+      border: 1px solid #E6D7C1;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: #FFEFD5;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .order-header:hover {
+      background: #FFE4B5;
+    }
+    
+    .order-main-info {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .order-id {
+      font-weight: bold;
+      color: #8B4513;
+    }
+    
+    .order-date {
+      color: #8B4513;
+    }
+    
+    .order-total {
+      font-weight: bold;
+      color: #8B4513;
+    }
+    
+    .order-status {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    
+    .status-pending { background: #FFECB3; color: #8B4513; }
+    .status-preparing { background: #B3E5FC; color: #01579B; }
+    .status-ready { background: #C8E6C9; color: #1B5E20; }
+    .status-completed { background: #B2DFDB; color: #004D40; }
+    .status-cancelled { background: #FFCDD2; color: #B71C1C; }
+    
+    .order-details {
+      padding: 1rem;
+      display: none;
+      border-top: 1px solid #E6D7C1;
+      background-color: #FFFEFC;
+    }
+    
+    .order-details.active {
+      display: block;
+    }
+    
+    .order-items {
+      margin-bottom: 1rem;
+    }
+    
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #F5F5F5;
+    }
+    
+    .item-name {
+      flex: 2;
+    }
+    
+    .item-quantity {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .item-price {
+      flex: 1;
+      text-align: right;
+    }
+    
+    .order-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+    }
+    
+    .summary-total {
+      font-weight: bold;
+      border-top: 1px solid #E6D7C1;
+      padding-top: 0.5rem;
+    }
+    
+    .delivery-info {
+      background: #FFEFD5;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      border-left: 4px solid #8B4513;
+    }
+    
+    .delivery-info h4 {
+      color: #8B4513;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .delivery-info p {
+      margin: 0.25rem 0;
+      font-size: 0.9rem;
+    }
+    
+    .order-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      justify-content: flex-end;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: #8B4513;
+      color: #FFF8DC;
+      padding: 8px 16px;
+      border-radius: 4px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+    
+    .btn:hover {
+      background: #A0522D;
+    }
+    
+    .btn-secondary {
+      background: #A1887F;
+      color: #FFF8DC;
+    }
+    
+    .btn-secondary:hover {
+      background: #8D6E63;
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+    }
+    
+    .empty-state i {
+      font-size: 4rem;
+      color: #E6D7C1;
+      margin-bottom: 1rem;
+    }
+    
+    .empty-state h3 {
+      margin-bottom: 0.5rem;
+      color: #8B4513;
+    }
+    
+    /* Footer */
+    footer {
+      background: #3E2723;
+      color: #FAFAFA;
+      padding: 2rem 0 0;
+      margin-top: 2rem;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      padding-bottom: 2rem;
+    }
+    
+    .footer-section h3 {
+      margin-bottom: 1rem;
+      color: #FFB74D;
+    }
+    
+    .copyright {
+      text-align: center;
+      padding: 1rem 0;
+      border-top: 1px solid #5D4037;
+      font-size: 0.9rem;
+      color: #BCAAA4;
+    }
+    
+    @media (max-width: 768px) {
+      .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .order-main-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .order-summary {
+        grid-template-columns: 1fr;
+      }
+      
+      .order-filters {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container">
+      <div class="logo-container">
+        <div class="logo-text">Why Pie? Bake Good And Treat</div>
+      </div>
+      <ul>
+        <li><a href="customer-dashboard.html">Dashboard</a></li>
+        <li id="user-nav">
+          <div class="user-info">
+            <span id="user-name">Customer</span>
+            <span class="user-role" id="user-role">Customer</span>
+            <a href="#" id="logout-btn">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+      <div class="container">
+        <div class="welcome-message">
+          <h1>Order History</h1>
+          <p>Track your previous orders and their status</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard">
+      <div class="container">
+        <!-- Order History Section -->
+        <div class="order-history-section">
+          <h2><i class="fas fa-history"></i> Your Orders</h2>
+          
+          <!-- Filters -->
+          <div class="order-filters">
+            <div class="filter-group">
+              <label for="status-filter">Status</label>
+              <select id="status-filter">
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="preparing">Preparing</option>
+                <option value="ready">Ready</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            
+            <div class="filter-group">
+              <label for="date-from">From Date</label>
+              <input type="date" id="date-from">
+            </div>
+            
+            <div class="filter-group">
+              <label for="date-to">To Date</label>
+              <input type="date" id="date-to">
+            </div>
+            
+            <div class="filter-group">
+              <label>&nbsp;</label>
+              <button class="btn" onclick="applyFilters()">Apply Filters</button>
+            </div>
+            
+            <div class="filter-group">
+              <label>&nbsp;</label>
+              <button class="btn btn-secondary" onclick="resetFilters()">Reset</button>
+            </div>
+          </div>
+          
+          <!-- Orders List -->
+          <div id="orders-list">
+            <!-- Orders will be dynamically inserted here -->
+          </div>
+          
+          <!-- Empty State (Initially Hidden) -->
+          <div id="empty-state" class="empty-state" style="display: none;">
+            <i class="fas fa-shopping-bag"></i>
+            <h3>No orders found</h3>
+            <p>Try adjusting your filters or place your first order!</p>
+            <a href="customer-dashboard.html" class="btn">Browse Menu</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Why Pie?</h3>
+          <p>Bake Good And Treat - Delicious homemade pies made with love and the finest ingredients.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Customer Support</h3>
+          <p>Email: support@whypie.com<br>Phone: (043) 123-4567</p>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2023 Why Pie? Bake Good And Treat. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple authentication simulation
+    const auth = {
+      checkSession: function() {
+        const user = localStorage.getItem('currentUser');
+        return user !== null;
+      },
+      
+      getCurrentUser: function() {
+        const user = localStorage.getItem('currentUser');
+        return user ? JSON.parse(user) : null;
+      },
+      
+      hasRole: function(role) {
+        const user = this.getCurrentUser();
+        return user && user.role === role;
+      },
+      
+      logout: function() {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'customer-login.html';
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check authentication
+      if (!auth.checkSession() || !auth.hasRole('customer')) {
+        window.location.href = 'customer-login.html';
+        return;
+      }
+
+      // Update user info
+      const currentUser = auth.getCurrentUser();
+      if (currentUser) {
+        document.getElementById('user-name').textContent = currentUser.name;
+      }
+
+      // Load order history
+      loadOrderHistory();
+
+      // Setup logout button
+      document.getElementById('logout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        auth.logout();
+      });
+    });
+
+    function loadOrderHistory() {
+      // Load orders from localStorage
+      const orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+      const currentUser = auth.getCurrentUser();
+      let userOrders = orders.filter(order => order.customerEmail === currentUser.email);
+      
+      // Sort orders by date (newest first)
+      userOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      displayOrders(userOrders);
+    }
+
+    function displayOrders(orders) {
+      const container = document.getElementById('orders-list');
+      const emptyState = document.getElementById('empty-state');
+      
+      if (orders.length === 0) {
+        container.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      emptyState.style.display = 'none';
+      
+      container.innerHTML = orders.map(order => {
+        // Calculate shipping fee
+        const shippingFee = order.shippingFee !== undefined ? 
+          order.shippingFee : (order.total < 500 ? 50 : 0);
+        
+        // Calculate subtotal
+        const subtotal = order.total - shippingFee;
+        
+        // Format order items
+        const itemsHtml = order.items.map(item => `
+          <div class="order-item-row">
+            <div class="item-name">${item.name}</div>
+            <div class="item-quantity">x${item.quantity}</div>
+            <div class="item-price">₱${(item.price * item.quantity).toFixed(2)}</div>
+          </div>
+        `).join('');
+        
+        // Format delivery address
+        const deliveryAddress = order.deliveryAddress || {};
+        const addressHtml = deliveryAddress.completeAddress ? `
+          <div class="delivery-info">
+            <h4><i class="fas fa-map-marker-alt"></i> Batangas Delivery Address</h4>
+            <p><strong>Name:</strong> ${deliveryAddress.fullName || 'N/A'}</p>
+            <p><strong>Phone:</strong> ${deliveryAddress.phone || 'N/A'}</p>
+            <p><strong>Complete Address:</strong> ${deliveryAddress.completeAddress}</p>
+            ${deliveryAddress.landmark ? `<p><strong>Landmark:</strong> ${deliveryAddress.landmark}</p>` : ''}
+            <p><strong>Municipality:</strong> ${deliveryAddress.municipality || 'N/A'}, Batangas</p>
+          </div>
+        ` : `
+          <div class="delivery-info">
+            <h4><i class="fas fa-map-marker-alt"></i> Delivery Address</h4>
+            <p><strong>Address:</strong> ${order.deliveryAddress || 'Address not available'}</p>
+          </div>
+        `;
+        
+        return `
+          <div class="order-item">
+            <div class="order-header" onclick="toggleOrderDetails('${order.id}')">
+              <div class="order-main-info">
+                <div class="order-id">Order #${order.id}</div>
+                <div class="order-date">${formatDate(order.date)}</div>
+                <div class="order-total">₱${order.total.toFixed(2)}</div>
+              </div>
+              <div class="order-status status-${order.status}">
+                ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+              </div>
+            </div>
+            <div class="order-details" id="details-${order.id}">
+              <div class="order-items">
+                ${itemsHtml}
+              </div>
+              <div class="order-summary">
+                <div>
+                  <h4>Order Summary</h4>
+                  <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>₱${subtotal.toFixed(2)}</span>
+                  </div>
+                  <div class="summary-row">
+                    <span>Shipping Fee:</span>
+                    <span>₱${shippingFee.toFixed(2)}</span>
+                  </div>
+                  <div class="summary-row summary-total">
+                    <span>Total:</span>
+                    <span>₱${order.total.toFixed(2)}</span>
+                  </div>
+                </div>
+                <div>
+                  <h4>Payment & Delivery</h4>
+                  <p><strong>Payment Method:</strong> ${order.paymentMethod ? order.paymentMethod.toUpperCase() : 'N/A'}</p>
+                  <p><strong>Estimated Delivery:</strong> ${getEstimatedDelivery(order)}</p>
+                </div>
+              </div>
+              
+              ${addressHtml}
+              
+              <div class="order-actions">
+                ${order.status === 'completed' ? `<button class="btn" onclick="reorder('${order.id}')">Reorder</button>` : ''}
+                ${order.status === 'pending' ? `<button class="btn btn-secondary" onclick="cancelOrder('${order.id}')">Cancel Order</button>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function formatDeliveryDate(dateString) {
+      const date = new Date(dateString);
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const formattedHours = hours % 12 || 12;
+      
+      return `Delivered on ${month}/${day}/${year} at ${formattedHours}:${minutes} ${ampm}`;
+    }
+
+    function toggleOrderDetails(orderId) {
+      const details = document.getElementById(`details-${orderId}`);
+      details.classList.toggle('active');
+    }
+
+    function getEstimatedDelivery(order) {
+      if (order.status === 'completed') {
+        const deliveryDate = order.deliveryDate ? new Date(order.deliveryDate) : new Date(order.date);
+        deliveryDate.setHours(deliveryDate.getHours() + 1);
+        deliveryDate.setMinutes(deliveryDate.getMinutes() + 30);
+        return formatDeliveryDate(deliveryDate);
+      }
+      
+      if (order.status === 'cancelled') {
+        return 'Order was cancelled';
+      }
+      
+      const orderTime = new Date(order.date);
+      const now = new Date();
+      
+      if (orderTime.toDateString() === now.toDateString()) {
+        const deliveryTime = new Date(orderTime);
+        deliveryTime.setHours(deliveryTime.getHours() + 1);
+        
+        const randomMinutes = Math.floor(Math.random() * 60);
+        deliveryTime.setMinutes(deliveryTime.getMinutes() + randomMinutes);
+        
+        return formatDeliveryDate(deliveryTime);
+      } else {
+        const deliveryTime = new Date(orderTime);
+        deliveryTime.setHours(deliveryTime.getHours() + 1);
+        deliveryTime.setMinutes(deliveryTime.getMinutes() + 30);
+        
+        return formatDeliveryDate(deliveryTime);
+      }
+    }
+
+    function applyFilters() {
+      const statusFilter = document.getElementById('status-filter').value;
+      const dateFrom = document.getElementById('date-from').value;
+      const dateTo = document.getElementById('date-to').value;
+      
+      const orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+      const currentUser = auth.getCurrentUser();
+      let filteredOrders = orders.filter(order => order.customerEmail === currentUser.email);
+      
+      if (statusFilter !== 'all') {
+        filteredOrders = filteredOrders.filter(order => order.status === statusFilter);
+      }
+      
+      if (dateFrom) {
+        const fromDate = new Date(dateFrom);
+        filteredOrders = filteredOrders.filter(order => new Date(order.date) >= fromDate);
+      }
+      
+      if (dateTo) {
+        const toDate = new Date(dateTo);
+        toDate.setHours(23, 59, 59, 999);
+        filteredOrders = filteredOrders.filter(order => new Date(order.date) <= toDate);
+      }
+      
+      displayOrders(filteredOrders);
+    }
+
+    function resetFilters() {
+      document.getElementById('status-filter').value = 'all';
+      document.getElementById('date-from').value = '';
+      document.getElementById('date-to').value = '';
+      loadOrderHistory();
+    }
+
+    function reorder(orderId) {
+      alert(`Reorder functionality for order #${orderId} would be implemented here`);
+    }
+
+    function cancelOrder(orderId) {
+      if (confirm('Are you sure you want to cancel this order?')) {
+        const orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+        const orderIndex = orders.findIndex(order => order.id === orderId);
+        
+        if (orderIndex !== -1) {
+          orders[orderIndex].status = 'cancelled';
+          localStorage.setItem('customerOrders', JSON.stringify(orders));
+          
+          loadOrderHistory();
+          alert('Order has been cancelled successfully.');
+        }
+      }
+    }
+  </script>
+</body>
+</html>

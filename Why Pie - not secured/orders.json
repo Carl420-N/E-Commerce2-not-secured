@@ -1,0 +1,82 @@
+[
+  {
+    "id": "WHYPIE001",
+    "customerName": "John Doe",
+    "phone": "09123456789",
+    "items": [
+      {
+        "id": 1,
+        "name": "Buko Langka Pie",
+        "price": 250,
+        "quantity": 2
+      },
+      {
+        "id": 2,
+        "name": "Apple Pie",
+        "price": 280,
+        "quantity": 1
+      }
+    ],
+    "total": 780,
+    "date": "2024-01-15T10:30:00.000Z",
+    "status": "completed",
+    "completedAt": "2024-01-15T11:45:00.000Z",
+    "deliveryAddress": {
+      "street": "123 Main Street",
+      "barangay": "Poblacion",
+      "municipality": "Mabini",
+      "landmark": "Near the church"
+    }
+  },
+  {
+    "id": "WHYPIE002",
+    "customerName": "Jane Smith",
+    "phone": "09198765432",
+    "items": [
+      {
+        "id": 1,
+        "name": "Buko Langka Pie",
+        "price": 250,
+        "quantity": 1
+      },
+      {
+        "id": 3,
+        "name": "Egg Pie",
+        "price": 220,
+        "quantity": 2
+      }
+    ],
+    "total": 690,
+    "date": "2024-01-16T14:20:00.000Z",
+    "status": "delivered",
+    "deliveryAddress": {
+      "street": "456 Oak Avenue",
+      "barangay": "Anilao",
+      "municipality": "Mabini",
+      "landmark": "Beside the school"
+    }
+  },
+  {
+    "id": "WHYPIE003",
+    "customerName": "Mike Johnson",
+    "phone": "09151234567",
+    "items": [
+      {
+        "id": 2,
+        "name": "Apple Pie",
+        "price": 280,
+        "quantity": 3
+      }
+    ],
+    "total": 840,
+    "date": "2024-01-17T09:15:00.000Z",
+    "status": "completed",
+    "completedAt": "2024-01-17T10:30:00.000Z",
+    "deliveryAddress": {
+      "street": "789 Pine Road",
+      "barangay": "Saguing",
+      "municipality": "Mabini",
+      "landmark": "Across the market"
+    }
+  }
+]

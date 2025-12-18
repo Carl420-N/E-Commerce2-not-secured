@@ -1,0 +1,26 @@
+[
+  {
+    "id": "acc_1705400000001",
+    "name": "Admin User",
+    "email": "admin@whypie.com",
+    "password": "admin123",
+    "role": "admin",
+    "createdAt": "2024-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "acc_1705400000002",
+    "name": "Staff Member 1",
+    "email": "staff1@whypie.com",
+    "password": "staff123",
+    "role": "staff",
+    "createdAt": "2024-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "acc_1705400000003",
+    "name": "Staff Member 2",
+    "email": "staff2@whypie.com",
+    "password": "staff123",
+    "role": "staff",
+    "createdAt": "2024-01-16T00:00:00.000Z"
+  }
+]

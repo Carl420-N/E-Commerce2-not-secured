@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customer Dashboard - Why Pie? Bake Good And Treat</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Updated CSS with improved formal design */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #FDF5E6; /* Old Lace */
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    
+    /* Navbar Styles - More formal appearance */
+    .navbar {
+      background: #8B4513; /* Saddle Brown */
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-image {
+      height: 40px;
+      width: auto;
+    }
+    
+    .logo-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.5rem;
+      color: #FFF8DC; /* Cornsilk */
+      font-weight: 600;
+    }
+    
+    .navbar ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .navbar a {
+      text-decoration: none;
+      color: #FFF8DC; /* Cornsilk */
+      font-weight: 500;
+      transition: color 0.3s;
+      font-size: 0.95rem;
+    }
+    
+    .navbar a:hover {
+      color: #FFD700; /* Gold */
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .user-role {
+      background: #FFD700; /* Gold */
+      color: #8B4513; /* Saddle Brown */
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    
+    #logout-btn {
+      background: #A52A2A;
+      color: #FFF8DC; /* Cornsilk */
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: background 0.3s;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+    }
+    
+    #logout-btn:hover {
+      background: #8B0000;
+    }
+    
+    /* Dashboard Header - More formal design */
+    .dashboard-header {
+      background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); /* Saddle Brown gradient */
+      color: #FFF8DC; /* Cornsilk */
+      padding: 2.5rem 0;
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .dashboard-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+      background-size: cover;
+    }
+    
+    .welcome-message {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .welcome-message h1 {
+      margin-bottom: 0.75rem;
+      font-size: 2.5rem;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    
+    .welcome-message p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    
+    /* Stats Section */
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    
+    .stat-card {
+      background: #FAF0E6; /* Linen */
+      padding: 1.75rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      border-left: 4px solid #8B4513; /* Saddle Brown */
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #8B4513;
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .stat-card:hover::after {
+      transform: scaleX(1);
+    }
+    
+    .stat-card i {
+      font-size: 2.5rem;
+      color: #8B4513; /* Saddle Brown */
+      margin-bottom: 1rem;
+    }
+    
+    .stat-card h3 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-weight: 600;
+    }
+    
+    .stat-card p {
+      color: #666;
+      font-weight: 500;
+    }
+    
+    /* Actions Section - Improved button layout */
+    .dashboard-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 2.5rem;
+    }
+    
+    .action-card {
+      background: #FAF0E6; /* Linen */
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #E6D6C2;
+    }
+    
+    .action-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #8B4513;
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    
+    .action-card:hover {
+      transform: translateY(-5px);
+      background: #FFEFD5; /* Papaya Whip */
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    
+    .action-card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .action-card i {
+      font-size: 3rem;
+      color: #8B4513; /* Saddle Brown */
+      margin-bottom: 1.25rem;
+      transition: transform 0.3s;
+    }
+    
+    .action-card:hover i {
+      transform: scale(1.1);
+    }
+    
+    .action-card h3 {
+      margin-bottom: 1rem;
+      color: #333;
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+    
+    .action-card p {
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    /* Shipping Fees Section */
+    .shipping-fees {
+      background: #FAF0E6; /* Linen */
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 2.5rem;
+      border: 1px solid #E6D6C2;
+    }
+    
+    .shipping-fees h2 {
+      margin-bottom: 1.75rem;
+      color: #333;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 1.75rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .shipping-fees h2::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: #8B4513;
+    }
+    
+    .shipping-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 2.5rem;
+    }
+    
+    .shipping-card {
+      background: #FFEFD5; /* Papaya Whip */
+      padding: 1.75rem;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #E6D6C2;
+      transition: transform 0.3s;
+    }
+    
+    .shipping-card:hover {
+      transform: translateY(-3px);
+    }
+    
+    .shipping-card i {
+      font-size: 2rem;
+      color: #8B4513;
+      margin-bottom: 1rem;
+    }
+    
+    .shipping-card h3 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: #8B4513; /* Saddle Brown */
+      font-weight: 600;
+    }
+    
+    .shipping-card p {
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .shipping-info {
+      margin-top: 1.75rem;
+      padding: 1.75rem;
+      background: #FFEFD5; /* Papaya Whip */
+      border-radius: 8px;
+      border-left: 4px solid #8B4513; /* Saddle Brown */
+    }
+    
+    .shipping-info h3 {
+      margin-bottom: 1.25rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
+    
+    .shipping-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.75rem;
+    }
+    
+    .shipping-detail-card {
+      background: #FAF0E6; /* Linen */
+      padding: 1.75rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid #E6D6C2;
+    }
+    
+    .shipping-detail-card h4 {
+      margin-bottom: 1.25rem;
+      color: #8B4513; /* Saddle Brown */
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+    
+    .shipping-detail-card ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    
+    .shipping-detail-card li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #E6D6C2;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .shipping-detail-card li:last-child {
+      border-bottom: none;
+    }
+    
+    .shipping-detail-card .icon {
+      color: #8B4513; /* Saddle Brown */
+      width: 20px;
+      text-align: center;
+    }
+    
+    .highlight {
+      background: #E8D5C4;
+      padding: 1rem;
+      border-radius: 6px;
+      font-weight: 500;
+      color: #5D4037;
+      margin-top: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+    }
+    
+    .empty-state i {
+      font-size: 4rem;
+      color: #ddd;
+      margin-bottom: 1rem;
+    }
+    
+    .empty-state h3 {
+      margin-bottom: 0.5rem;
+      color: #666;
+      font-weight: 600;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: #8B4513; /* Saddle Brown */
+      color: #FFF8DC; /* Cornsilk */
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: all 0.3s;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    
+    .btn:hover {
+      background: #6B3410;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    /* Footer */
+    footer {
+      background: #3E2723; /* Dark Brown */
+      color: #FAFAFA; /* Almost White */
+      padding: 2.5rem 0 0;
+      margin-top: 3rem;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2.5rem;
+      padding-bottom: 2.5rem;
+    }
+    
+    .footer-section h3 {
+      margin-bottom: 1.25rem;
+      color: #FFB74D; /* Light Orange */
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+    }
+    
+    .copyright {
+      text-align: center;
+      padding: 1.25rem 0;
+      border-top: 1px solid #5D4037;
+      font-size: 0.9rem;
+      color: #BCAAA4;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .navbar ul {
+        gap: 1rem;
+      }
+      
+      .user-info {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+      }
+      
+      .dashboard-header {
+        padding: 2rem 0;
+      }
+      
+      .welcome-message h1 {
+        font-size: 2rem;
+      }
+      
+      .shipping-fees {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container">
+      <div class="logo-container">
+        <div class="logo-text">Why Pie? Bake Good And Treat</div>
+      </div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li id="user-nav">
+          <div class="user-info">
+            <span id="user-name">Customer</span>
+            <span class="user-role" id="user-role">Customer</span>
+            <button id="logout-btn">Logout</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+      <div class="container">
+        <div class="welcome-message">
+          <h1>Welcome Back!</h1>
+          <p>Ready to order some delicious pies?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard">
+      <div class="container">
+        <!-- Quick Stats -->
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <i class="fas fa-shopping-cart"></i>
+            <h3 id="total-orders">0</h3>
+            <p>Total Orders</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <h3 id="pending-orders">0</h3>
+            <p>Pending Orders</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-check-circle"></i>
+            <h3 id="completed-orders">0</h3>
+            <p>Completed Orders</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-money-bill-wave"></i>
+            <h3>₱<span id="total-spent">0</span></h3>
+            <p>Total Spent</p>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-actions">
+          <a class="action-card" href="index.html#menu">
+            <i class="fas fa-utensils"></i>
+            <h3>Browse Menu</h3>
+            <p>Explore our delicious pie selection and place a new order</p>
+          </a>
+          <a class="action-card" href="order-history.html">
+            <i class="fas fa-history"></i>
+            <h3>Order History</h3>
+            <p>Track your previous orders and their status</p>
+          </a>
+          <a class="action-card" href="profile.html">
+            <i class="fas fa-user"></i>
+            <h3>My Profile</h3>
+            <p>Update your personal information and preferences</p>
+          </a>
+        </div>
+
+        <!-- Shipping Fees Section -->
+        <div class="shipping-fees">
+          <h2>Shipping Information</h2>
+          <div class="shipping-summary">
+            <div class="shipping-card">
+              <i class="fas fa-truck"></i>
+              <h3>₱<span id="total-shipping">0</span></h3>
+              <p>Total Shipping Fees</p>
+            </div>
+            <div class="shipping-card">
+              <i class="fas fa-box"></i>
+              <h3 id="shipping-orders">0</h3>
+              <p>Orders with Shipping</p>
+            </div>
+            <div class="shipping-card">
+              <i class="fas fa-percentage"></i>
+              <h3 id="shipping-percentage">0%</h3>
+              <p>Shipping vs Order Total</p>
+            </div>
+          </div>
+          
+          <div class="shipping-info">
+            <h3><i class="fas fa-info-circle"></i> Delivery Details</h3>
+            <div class="shipping-details">
+              <div class="shipping-detail-card">
+                <h4><i class="fas fa-money-bill-wave"></i> Shipping Fees</h4>
+                <ul>
+                  <li>
+                    <span class="icon"><i class="fas fa-tag"></i></span>
+                    <span><strong>Standard Delivery:</strong> ₱50 for orders under ₱500</span>
+                  </li>
+                  <li>
+                    <span class="icon"><i class="fas fa-gift"></i></span>
+                    <span><strong>Free Shipping:</strong> For orders ₱500 and above</span>
+                  </li>
+                  <li>
+                    <span class="icon"><i class="fas fa-calculator"></i></span>
+                    <span>Shipping fees are automatically calculated at checkout</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="shipping-detail-card">
+                <h4><i class="fas fa-clock"></i> Delivery Times</h4>
+                <ul>
+                  <li>
+                    <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
+                    <span><strong>Mabini:</strong> 1-2 business hours</span>
+                  </li>
+                  <li>
+                    <span class="icon"><i class="fas fa-map"></i></span>
+                    <span><strong>Provincial Areas:</strong> 3-5 business days</span>
+                  </li>
+                  <li>
+                    <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+                    <span>Orders placed after 3 PM will be processed the next business day</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="shipping-detail-card">
+                <h4><i class="fas fa-shipping-fast"></i> Additional Information</h4>
+                <ul>
+                  <li>
+                    <span class="icon"><i class="fas fa-phone"></i></span>
+                    <span>You'll receive tracking information once your order ships</span>
+                  </li>
+                  <li>
+                    <span class="icon"><i class="fas fa-exclamation-triangle"></i></span>
+                    <span>Delivery times may vary during holidays and peak seasons</span>
+                  </li>
+                  <li>
+                    <span class="icon"><i class="fas fa-headset"></i></span>
+                    <span>Contact support for special delivery requests</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="highlight">
+              <i class="fas fa-lightbulb"></i> 
+              <strong>Tip:</strong> Order ₱500 or more to get free shipping on your delicious pies!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Why Pie?</h3>
+          <p>Bake Good And Treat - Delicious homemade pies made with love and the finest ingredients.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Customer Support</h3>
+          <p>Email: support@whypie.com<br>Phone: (+63) 927-482-1298</p>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2023 Why Pie? Bake Good And Treat. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check authentication
+      const isLoggedIn = localStorage.getItem('customerLoggedIn') === 'true';
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      
+      if (!isLoggedIn || !currentUser || currentUser.role !== 'customer') {
+        window.location.href = 'customer-login.html';
+        return;
+      }
+
+      // Update user info in navbar
+      document.getElementById('user-name').textContent = currentUser.name || 'Customer';
+      
+      // Setup logout button
+      document.getElementById('logout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('customerLoggedIn');
+        localStorage.removeItem('currentUser');
+        window.location.href = 'customer-login.html';
+      });
+
+      // Load dashboard data
+      loadDashboardData();
+    });
+
+    function loadDashboardData() {
+      // Load orders from localStorage
+      const orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const userOrders = orders.filter(order => order.customerEmail === currentUser.email);
+      
+      updateStats(userOrders);
+      updateShippingStats(userOrders);
+    }
+
+    function updateStats(orders) {
+      const totalOrders = orders.length;
+      const pendingOrders = orders.filter(order => 
+        ['pending', 'confirmed', 'preparing'].includes(order.status)
+      ).length;
+      const completedOrders = orders.filter(order => 
+        order.status === 'completed'
+      ).length;
+      const totalSpent = orders.reduce((total, order) => total + order.total, 0);
+
+      document.getElementById('total-orders').textContent = totalOrders;
+      document.getElementById('pending-orders').textContent = pendingOrders;
+      document.getElementById('completed-orders').textContent = completedOrders;
+      document.getElementById('total-spent').textContent = totalSpent.toFixed(2);
+    }
+
+    function updateShippingStats(orders) {
+      // Calculate shipping fees (assuming ₱50 for orders under ₱500, free above)
+      const totalShipping = orders.reduce((total, order) => {
+        // Check if order already has shipping fee property
+        if (order.shippingFee !== undefined) {
+          return total + order.shippingFee;
+        }
+        // Calculate shipping fee if not present
+        const shippingFee = order.total < 500 ? 50 : 0;
+        return total + shippingFee;
+      }, 0);
+      
+      // Count orders that had shipping fees
+      const ordersWithShipping = orders.filter(order => {
+        if (order.shippingFee !== undefined) {
+          return order.shippingFee > 0;
+        }
+        return order.total < 500;
+      }).length;
+      
+      // Calculate percentage of shipping fees vs total spent
+      const totalSpent = orders.reduce((total, order) => total + order.total, 0);
+      const shippingPercentage = totalSpent > 0 ? ((totalShipping / totalSpent) * 100).toFixed(1) : 0;
+      
+      document.getElementById('total-shipping').textContent = totalShipping.toFixed(2);
+      document.getElementById('shipping-orders').textContent = ordersWithShipping;
+      document.getElementById('shipping-percentage').textContent = shippingPercentage + '%';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Profile - Why Pie? Bake Good And Treat</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Oswald:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #FDF5E6; /* Old Lace - Main background */
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    
+    /* Navbar Styles */
+    .navbar {
+      background: #8B4513; /* Saddle Brown - Header background */
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.5rem;
+      color: #FFF8DC; /* Cornsilk - Header text */
+    }
+    
+    .navbar ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .navbar a {
+      text-decoration: none;
+      color: #FFF8DC; /* Cornsilk - Header text */
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .navbar a:hover {
+      color: #FFD700; /* Gold - Accent for hover states */
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .user-role {
+      background: #FFD700; /* Gold - Accent */
+      color: #8B4513; /* Saddle Brown */
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    
+    #logout-btn {
+      background: #FFB74D; /* Light Orange - Footer accent */
+      color: #3E2723; /* Dark Brown */
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    
+    #logout-btn:hover {
+      background: #FFA726; /* Darker orange on hover */
+    }
+    
+    /* Dashboard Header */
+    .dashboard-header {
+      background: linear-gradient(135deg, #8B4513, #A0522D); /* Saddle Brown gradient */
+      color: #FFF8DC; /* Cornsilk */
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+    }
+    
+    .welcome-message {
+      text-align: center;
+    }
+    
+    .welcome-message h1 {
+      margin-bottom: 0.5rem;
+      font-size: 2.5rem;
+    }
+    
+    /* Profile Section */
+    .profile-section {
+      background: #FAF0E6; /* Linen - Secondary background */
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .profile-section h2 {
+      margin-bottom: 1.5rem;
+      color: #8B4513; /* Saddle Brown */
+      border-bottom: 2px solid #8B4513; /* Saddle Brown */
+      padding-bottom: 0.5rem;
+    }
+    
+    .profile-info {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .profile-picture {
+      text-align: center;
+      position: relative;
+    }
+    
+    .profile-picture img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #8B4513; /* Saddle Brown */
+      transition: opacity 0.3s;
+    }
+    
+    .profile-picture:hover img {
+      opacity: 0.8;
+    }
+    
+    .profile-picture-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(139, 69, 19, 0.7); /* Saddle Brown with transparency */
+      opacity: 0;
+      transition: opacity 0.3s;
+      cursor: pointer;
+    }
+    
+    .profile-picture:hover .profile-picture-overlay {
+      opacity: 1;
+    }
+    
+    .profile-picture-overlay i {
+      color: #FFF8DC; /* Cornsilk */
+      font-size: 2rem;
+    }
+    
+    .profile-details {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #E6D7C1; /* Light brown border */
+    }
+    
+    .detail-label {
+      font-weight: 500;
+      color: #8B4513; /* Saddle Brown */
+    }
+    
+    .detail-value {
+      color: #333;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #8B4513; /* Saddle Brown */
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #E6D7C1; /* Light brown border */
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      background-color: #FFFEFC; /* Slightly off-white */
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: #8B4513; /* Saddle Brown */
+      color: #FFF8DC; /* Cornsilk */
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    
+    .btn:hover {
+      background: #A0522D; /* Darker brown */
+    }
+    
+    .btn-secondary {
+      background: #A1887F; /* Brownish gray */
+      color: #FFF8DC; /* Cornsilk */
+    }
+    
+    .btn-secondary:hover {
+      background: #8D6E63; /* Darker brownish gray */
+    }
+    
+    .btn-danger {
+      background: #D84315; /* Deep orange */
+      color: #FFF8DC; /* Cornsilk */
+    }
+    
+    .btn-danger:hover {
+      background: #BF360C; /* Darker deep orange */
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: #FAF0E6; /* Linen - Secondary background */
+      border-radius: 12px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-header h3 {
+      margin: 0;
+      color: #8B4513; /* Saddle Brown */
+    }
+    
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #8B4513; /* Saddle Brown */
+    }
+    
+    .close-modal:hover {
+      color: #5D4037; /* Darker brown */
+    }
+    
+    .upload-area {
+      border: 2px dashed #E6D7C1; /* Light brown border */
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+      transition: border-color 0.3s;
+      background-color: #FFFEFC; /* Slightly off-white */
+    }
+    
+    .upload-area:hover {
+      border-color: #8B4513; /* Saddle Brown */
+    }
+    
+    .upload-area i {
+      font-size: 3rem;
+      color: #8B4513; /* Saddle Brown */
+      margin-bottom: 1rem;
+    }
+    
+    .upload-area p {
+      margin-bottom: 1rem;
+      color: #8B4513; /* Saddle Brown */
+    }
+    
+    .image-preview {
+      display: none;
+      margin: 1rem 0;
+      text-align: center;
+    }
+    
+    .image-preview img {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 8px;
+      border: 1px solid #E6D7C1; /* Light brown border */
+    }
+    
+    /* Footer */
+    footer {
+      background: #3E2723; /* Dark Brown - Footer background */
+      color: #FAFAFA; /* Almost White - Footer text */
+      padding: 2rem 0 0;
+      margin-top: 2rem;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      padding-bottom: 2rem;
+    }
+    
+    .footer-section h3 {
+      margin-bottom: 1rem;
+      color: #FFB74D; /* Light Orange - Footer accent */
+    }
+    
+    .copyright {
+      text-align: center;
+      padding: 1rem 0;
+      border-top: 1px solid #5D4037; /* Darker brown border */
+      font-size: 0.9rem;
+      color: #BCAAA4; /* Light brown text */
+    }
+    
+    @media (max-width: 768px) {
+      .profile-info {
+        grid-template-columns: 1fr;
+      }
+      
+      .profile-picture {
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container">
+      <div class="logo-container">
+        <div class="logo-text">Why Pie? Bake Good And Treat</div>
+      </div>
+      <ul>
+        <!-- Removed Home, Menu, and My Cart links -->
+        <li><a href="customer-dashboard.html">Dashboard</a></li>
+        <li id="user-nav">
+          <div class="user-info">
+            <span id="user-name">Customer</span>
+            <span class="user-role" id="user-role">Customer</span>
+            <a href="#" id="logout-btn">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+      <div class="container">
+        <div class="welcome-message">
+          <h1>My Profile</h1>
+          <p>Manage your account information and preferences</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard">
+      <div class="container">
+        <!-- Profile Information -->
+        <div class="profile-section">
+          <h2><i class="fas fa-user-circle"></i> Personal Information</h2>
+          
+          <div class="profile-info">
+            <div class="profile-picture">
+              <img src="https://ui-avatars.com/api/?name=Customer+Name&background=8B4513&color=FFF8DC&size=150" alt="Profile Picture" id="profile-picture">
+              <div class="profile-picture-overlay" onclick="openPictureModal()">
+                <i class="fas fa-camera"></i>
+              </div>
+              <button class="btn btn-secondary" style="margin-top: 1rem; width: 100%;" onclick="openPictureModal()">Change Picture</button>
+            </div>
+            
+            <div class="profile-details">
+              <div class="detail-row">
+                <span class="detail-label">Full Name:</span>
+                <span class="detail-value" id="profile-name">Customer Name</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Email:</span>
+                <span class="detail-value" id="profile-email">customer@example.com</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Phone:</span>
+                <span class="detail-value" id="profile-phone">+63 912 345 6789</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Member Since:</span>
+                <span class="detail-value" id="member-since">January 2023</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Loyalty Points:</span>
+                <span class="detail-value" id="loyalty-points">150 points</span>
+              </div>
+            </div>
+          </div>
+          
+          <button class="btn" onclick="toggleEditMode()" id="edit-toggle-btn">Edit Information</button>
+        </div>
+
+        <!-- Edit Profile Form (Initially Hidden) -->
+        <div class="profile-section" id="edit-profile-form" style="display: none;">
+          <h2><i class="fas fa-edit"></i> Edit Profile</h2>
+          
+          <form id="profile-form">
+            <div class="form-group">
+              <label for="edit-name">Full Name</label>
+              <input type="text" id="edit-name" value="Customer Name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="edit-email">Email Address</label>
+              <input type="email" id="edit-email" value="customer@example.com" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="edit-phone">Phone Number</label>
+              <input type="tel" id="edit-phone" value="+63 912 345 6789">
+            </div>
+            
+            <div class="form-group">
+              <label for="edit-address">Delivery Address</label>
+              <textarea id="edit-address">123 Main Street, Metro Manila, Philippines</textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="edit-preferences">Dietary Preferences</label>
+              <select id="edit-preferences" multiple>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="gluten-free">Gluten-Free</option>
+                <option value="dairy-free">Dairy-Free</option>
+                <option value="nut-free">Nut-Free</option>
+              </select>
+              <small>Hold Ctrl/Cmd to select multiple options</small>
+            </div>
+            
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" onclick="toggleEditMode()">Cancel</button>
+              <button type="submit" class="btn">Save Changes</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Account Settings -->
+        <div class="profile-section">
+          <h2><i class="fas fa-cog"></i> Account Settings</h2>
+          
+          <div class="profile-details">
+            <div class="detail-row">
+              <span class="detail-label">Password:</span>
+              <span class="detail-value">********</span>
+              <button class="btn btn-secondary" onclick="changePassword()">Change Password</button>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Newsletter:</span>
+              <span class="detail-value">Subscribed</span>
+              <button class="btn btn-secondary" onclick="toggleNewsletter()">Unsubscribe</button>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Account Status:</span>
+              <span class="detail-value" style="color: #8B4513;">Active</span>
+            </div>
+          </div>
+          
+          <div style="margin-top: 2rem; text-align: center;">
+            <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Profile Picture Modal -->
+  <div class="modal" id="picture-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Change Profile Picture</h3>
+        <button class="close-modal" onclick="closePictureModal()">&times;</button>
+      </div>
+      
+      <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Click to upload a new profile picture</p>
+        <p class="small">Supported formats: JPG, PNG, GIF (Max 5MB)</p>
+      </div>
+      
+      <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+      
+      <div class="image-preview" id="image-preview">
+        <img id="preview-image" src="" alt="Preview">
+        <p>Preview of your new profile picture</p>
+      </div>
+      
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closePictureModal()">Cancel</button>
+        <button type="button" class="btn" id="save-picture-btn" onclick="saveProfilePicture()" disabled>Save Picture</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Why Pie?</h3>
+          <p>Bake Good And Treat - Delicious homemade pies made with love and the finest ingredients.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Customer Support</h3>
+          <p>Email: support@whypie.com<br>Phone: (043) 123-4567</p>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2023 Why Pie? Bake Good And Treat. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple authentication simulation
+    const auth = {
+      checkSession: function() {
+        const user = localStorage.getItem('currentUser');
+        return user !== null;
+      },
+      
+      getCurrentUser: function() {
+        const user = localStorage.getItem('currentUser');
+        return user ? JSON.parse(user) : null;
+      },
+      
+      hasRole: function(role) {
+        const user = this.getCurrentUser();
+        return user && user.role === role;
+      },
+      
+      logout: function() {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'customer-login.html';
+      }
+    };
+
+    // Variables for image handling
+    let uploadedImage = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check authentication
+      if (!auth.checkSession() || !auth.hasRole('customer')) {
+        window.location.href = 'customer-login.html';
+        return;
+      }
+
+      // Load user data
+      const currentUser = auth.getCurrentUser();
+      if (currentUser) {
+        document.getElementById('user-name').textContent = currentUser.name;
+        document.getElementById('profile-name').textContent = currentUser.name;
+        document.getElementById('profile-email').textContent = currentUser.email;
+        document.getElementById('edit-name').value = currentUser.name;
+        document.getElementById('edit-email').value = currentUser.email;
+        
+        // Load profile picture if exists
+        const profileData = JSON.parse(localStorage.getItem('userProfile')) || {};
+        if (profileData.profilePicture) {
+          document.getElementById('profile-picture').src = profileData.profilePicture;
+        }
+        
+        // Load additional profile data from localStorage
+        if (profileData.phone) {
+          document.getElementById('profile-phone').textContent = profileData.phone;
+          document.getElementById('edit-phone').value = profileData.phone;
+        }
+        if (profileData.address) {
+          document.getElementById('edit-address').value = profileData.address;
+        }
+        if (profileData.memberSince) {
+          document.getElementById('member-since').textContent = profileData.memberSince;
+        }
+        if (profileData.loyaltyPoints) {
+          document.getElementById('loyalty-points').textContent = profileData.loyaltyPoints + ' points';
+        }
+      }
+
+      // Setup logout button
+      document.getElementById('logout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        auth.logout();
+      });
+
+      // Setup form submission
+      document.getElementById('profile-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveProfileChanges();
+      });
+    });
+
+    function toggleEditMode() {
+      const form = document.getElementById('edit-profile-form');
+      const button = document.getElementById('edit-toggle-btn');
+      
+      if (form.style.display === 'none') {
+        form.style.display = 'block';
+        button.textContent = 'Cancel Editing';
+        button.classList.add('btn-secondary');
+      } else {
+        form.style.display = 'none';
+        button.textContent = 'Edit Information';
+        button.classList.remove('btn-secondary');
+      }
+    }
+
+    function saveProfileChanges() {
+      const name = document.getElementById('edit-name').value;
+      const email = document.getElementById('edit-email').value;
+      const phone = document.getElementById('edit-phone').value;
+      const address = document.getElementById('edit-address').value;
+      
+      // Update displayed values
+      document.getElementById('profile-name').textContent = name;
+      document.getElementById('profile-email').textContent = email;
+      document.getElementById('profile-phone').textContent = phone;
+      
+      // Update current user in localStorage
+      const currentUser = auth.getCurrentUser();
+      currentUser.name = name;
+      currentUser.email = email;
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      
+      // Save additional profile data
+      const profileData = JSON.parse(localStorage.getItem('userProfile')) || {};
+      profileData.phone = phone;
+      profileData.address = address;
+      profileData.memberSince = document.getElementById('member-since').textContent;
+      profileData.loyaltyPoints = 150; // This would typically come from a database
+      localStorage.setItem('userProfile', JSON.stringify(profileData));
+      
+      // Update navbar
+      document.getElementById('user-name').textContent = name;
+      
+      // Show success message
+      alert('Profile updated successfully!');
+      
+      // Return to view mode
+      toggleEditMode();
+    }
+
+    function openPictureModal() {
+      document.getElementById('picture-modal').style.display = 'flex';
+      // Reset the modal state
+      document.getElementById('image-preview').style.display = 'none';
+      document.getElementById('save-picture-btn').disabled = true;
+      uploadedImage = null;
+    }
+
+    function closePictureModal() {
+      document.getElementById('picture-modal').style.display = 'none';
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Check if file is an image
+      if (!file.type.match('image.*')) {
+        alert('Please select an image file (JPG, PNG, GIF)');
+        return;
+      }
+
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const previewImage = document.getElementById('preview-image');
+        previewImage.src = e.target.result;
+        document.getElementById('image-preview').style.display = 'block';
+        document.getElementById('save-picture-btn').disabled = false;
+        uploadedImage = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveProfilePicture() {
+      if (!uploadedImage) return;
+
+      // Update profile picture
+      document.getElementById('profile-picture').src = uploadedImage;
+      
+      // Save to localStorage
+      const profileData = JSON.parse(localStorage.getItem('userProfile')) || {};
+      profileData.profilePicture = uploadedImage;
+      localStorage.setItem('userProfile', JSON.stringify(profileData));
+      
+      // Show success message and close modal
+      alert('Profile picture updated successfully!');
+      closePictureModal();
+    }
+
+    function changePassword() {
+      alert('Password change functionality would be implemented here');
+    }
+
+    function toggleNewsletter() {
+      const button = document.querySelector('.profile-details .detail-row:nth-child(2) button');
+      const status = document.querySelector('.profile-details .detail-row:nth-child(2) .detail-value');
+      
+      if (status.textContent === 'Subscribed') {
+        status.textContent = 'Not Subscribed';
+        button.textContent = 'Subscribe';
+      } else {
+        status.textContent = 'Subscribed';
+        button.textContent = 'Unsubscribe';
+      }
+    }
+
+    function deleteAccount() {
+      if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        alert('Account deletion functionality would be implemented here');
+        // In a real app, this would make an API call to delete the account
+        // auth.logout(); // Then log the user out
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Staff Dashboard - Why Pie? Bake Good And Treat</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Oswald:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Updated CSS with new color scheme */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #FDF5E6; /* Old Lace */
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Navigation */
+    .navbar {
+      background-color: #8B4513; /* Saddle Brown */
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-image {
+      height: 40px;
+      width: auto;
+    }
+
+    .logo-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.5rem;
+      color: #FFF8DC; /* Cornsilk */
+    }
+
+    .navbar ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #FFF8DC; /* Cornsilk */
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .navbar a:hover, .navbar a.active {
+      color: #FFD700; /* Gold */
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-role {
+      background: #FFD700; /* Gold */
+      color: #8B4513; /* Saddle Brown */
+      padding: 0.25rem 0.75rem;
+      border-radius: 15px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    /* Dashboard Header */
+    .dashboard-header {
+      background: #8B4513; /* Saddle Brown */
+      color: #FFF8DC; /* Cornsilk */
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .welcome-message {
+      text-align: center;
+    }
+
+    .welcome-message h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Dashboard Stats */
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: #FAF0E6; /* Linen */
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      border-left: 4px solid #8B4513; /* Saddle Brown */
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+
+    .stat-card i {
+      font-size: 2.5rem;
+      color: #8B4513; /* Saddle Brown */
+      margin-bottom: 1rem;
+    }
+
+    .stat-card h3 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    .stat-card p {
+      color: #666;
+    }
+
+    /* Orders Section */
+    .orders-section {
+      background: #FAF0E6; /* Linen */
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #E6D6C2;
+    }
+
+    .section-header h2 {
+      font-family: 'Oswald', sans-serif;
+      color: #333;
+    }
+
+    .order-filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid #E6D6C2;
+      background: #FFF;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active {
+      background: #8B4513; /* Saddle Brown */
+      color: #FFF8DC; /* Cornsilk */
+      border-color: #8B4513;
+    }
+
+    .order-card {
+      border: 1px solid #E6D6C2;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      background: #FFEFD5; /* Papaya Whip */
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .order-items {
+      margin-bottom: 1rem;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #E6D6C2;
+    }
+
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .status-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .status-select {
+      padding: 0.5rem 1rem;
+      border: 1px solid #E6D6C2;
+      border-radius: 4px;
+      background: white;
+      font-family: 'Inter', sans-serif;
+      min-width: 150px;
+    }
+
+    .update-btn {
+      background: #8B4513;
+      color: #FFF8DC;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .update-btn:hover {
+      background: #6B3710;
+      transform: translateY(-2px);
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .status-pending { background: #FFF3CD; color: #856404; }
+    .status-confirmed { background: #D1ECF1; color: #0C5460; }
+    .status-preparing { background: #CCE7FF; color: #004085; }
+    .status-ready { background: #D4EDDA; color: #155724; }
+    .status-out-for-delivery { background: #E6CCFF; color: #4B0082; }
+    .status-completed { background: #D1ECF1; color: #0C5460; }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
+
+    /* Footer */
+    footer {
+      background: #3E2723; /* Dark Brown */
+      color: #FAFAFA; /* Almost White */
+      padding: 2rem 0 0;
+      margin-top: 3rem;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-section h3 {
+      font-family: 'Oswald', sans-serif;
+      margin-bottom: 1rem;
+      color: #FFB74D; /* Light Orange */
+    }
+
+    .copyright {
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-top: 1px solid #5D4037;
+      font-size: 0.875rem;
+      color: #BCAAA4;
+    }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      background: #8B4513; /* Saddle Brown */
+      color: #FFF8DC; /* Cornsilk */
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    @media (max-width: 768px) {
+      .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .order-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .status-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .status-select {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container">
+      <div class="logo-container">
+        <img src="why pie logo.png" alt="Why Pie? Logo" class="logo-image">
+        <div class="logo-text">Why Pie? Bake Good And Treat</div>
+      </div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="staff-dashboard.html" class="active">Dashboard</a></li>
+        <li id="user-nav">
+          <div class="user-info">
+            <span id="user-name">Staff</span>
+            <span class="user-role" id="user-role">Staff</span>
+            <a href="#" id="logout-btn">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+      <div class="container">
+        <div class="welcome-message">
+          <h1>Staff Dashboard</h1>
+          <p>Manage orders and update order status</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard">
+      <div class="container">
+        <!-- Quick Stats -->
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <i class="fas fa-list-alt"></i>
+            <h3 id="total-orders">0</h3>
+            <p>Total Orders Today</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <h3 id="pending-orders">1</h3>
+            <p>Pending Orders</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-utensils"></i>
+            <h3 id="preparing-orders">1</h3>
+            <p>Preparing Orders</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-truck"></i>
+            <h3 id="out-for-delivery-orders">0</h3>
+            <p>Out for Delivery</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-check-circle"></i>
+            <h3 id="completed-orders">0</h3>
+            <p>Completed Today</p>
+          </div>
+        </div>
+
+        <!-- Orders Management -->
+        <div class="orders-section">
+          <div class="section-header">
+            <h2>Order Management</h2>
+            <div class="order-filters">
+              <button class="filter-btn active" data-filter="all">All Orders</button>
+              <button class="filter-btn" data-filter="pending">Pending</button>
+              <button class="filter-btn" data-filter="confirmed">Confirmed</button>
+              <button class="filter-btn" data-filter="preparing">Preparing</button>
+              <button class="filter-btn" data-filter="ready">Ready</button>
+              <button class="filter-btn" data-filter="out-for-delivery">Out for Delivery</button>
+              <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+          </div>
+          
+          <div id="orders-list">
+            <!-- Orders will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Why Pie?</h3>
+        <p>Bake Good And Treat - Delicious homemade pies made with love and the finest ingredients.</p>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2023 Why Pie? Bake Good And Treat. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Notification Element -->
+  <div id="notification" class="notification"></div>
+
+<script>
+    // Sample data to demonstrate the statistics
+    const sampleOrders = [
+      {
+        id: '1001',
+        customerName: 'John Smith',
+        date: new Date().toISOString().split('T')[0],
+        status: 'pending',
+        items: [
+          { id: '2', name: 'Apple Pie', price: 280, quantity: 1 },
+          { id: '3', name: 'Egg Pie', price: 220, quantity: 2 }
+        ],
+        total: 720
+      },
+      {
+        id: '1002',
+        customerName: 'Maria Garcia',
+        date: new Date().toISOString().split('T')[0],
+        status: 'preparing',
+        items: [
+          { id: '4', name: 'Ube Pie', price: 270, quantity: 1 },
+          { id: '2', name: 'Apple Pie', price: 280, quantity: 1 }
+        ],
+        total: 550
+      },
+      {
+        id: '1003',
+        customerName: 'Robert Johnson',
+        date: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0], // Yesterday's order
+        status: 'out-for-delivery',
+        items: [
+          { id: '3', name: 'Egg Pie', price: 220, quantity: 1 }
+        ],
+        total: 220
+      },
+      {
+        id: '1004',
+        customerName: 'Sarah Wilson',
+        date: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0], // Yesterday's order
+        status: 'completed',
+        completedAt: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(), // Completed yesterday
+        items: [
+          { id: '4', name: 'Ube Pie', price: 270, quantity: 1 }
+        ],
+        total: 270
+      }
+    ];
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Enhanced authentication check
+        function checkStaffAuth() {
+            const isLoggedIn = localStorage.getItem('staffLoggedIn') === 'true';
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            
+            console.log('Auth check:', { isLoggedIn, currentUser }); // Debug log
+            
+            if (!isLoggedIn || !currentUser || currentUser.role !== 'staff') {
+                // Clear any invalid session
+                localStorage.removeItem('staffLoggedIn');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('lastLogin');
+                
+                // Redirect to login with message
+                window.location.href = 'staff-login.html?message=Please login to access staff dashboard';
+                return false;
+            }
+            
+            // Check if session is expired (24 hours)
+            const lastLogin = localStorage.getItem('lastLogin');
+            if (lastLogin) {
+                const loginTime = new Date(lastLogin);
+                const now = new Date();
+                const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
+                
+                if (hoursDiff > 24) {
+                    // Session expired
+                    localStorage.removeItem('staffLoggedIn');
+                    localStorage.removeItem('currentUser');
+                    localStorage.removeItem('lastLogin');
+                    window.location.href = 'staff-login.html?message=Session expired. Please login again.';
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        // Check authentication immediately
+        if (!checkStaffAuth()) {
+            return;
+        }
+
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        
+        // Update user info in navbar
+        document.getElementById('user-name').textContent = currentUser.name || 'Staff';
+        
+        // Update welcome message based on user status
+        const welcomeMessage = document.querySelector('.welcome-message p');
+        if (currentUser.status === 'pending') {
+            welcomeMessage.innerHTML += '<br><small style="color: #FFA500;">Your account is pending approval. Some features may be limited.</small>';
+        }
+
+        // Initialize with sample data if no orders exist
+        if (!localStorage.getItem('customerOrders')) {
+            localStorage.setItem('customerOrders', JSON.stringify(sampleOrders));
+        }
+        if (!localStorage.getItem('orders')) {
+            localStorage.setItem('orders', JSON.stringify(sampleOrders));
+        }
+
+        // Load orders
+        loadOrders();
+
+        // Setup filters
+        setupFilters();
+
+        // Setup logout
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('staffLoggedIn');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('lastLogin');
+            window.location.href = 'staff-login.html?message=Logged out successfully';
+        });
+
+        // Auto-logout after 24 hours
+        setInterval(() => {
+            checkStaffAuth();
+        }, 60000); // Check every minute
+    });
+
+    function loadOrders(filter = 'all') {
+      const orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+      updateStats(orders);
+      displayOrders(orders, filter);
+    }
+
+    function updateStats(orders) {
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Filter today's orders (placed today)
+      const todayOrders = orders.filter(order => {
+        const orderDate = new Date(order.date).toISOString().split('T')[0];
+        return orderDate === today;
+      });
+      
+      // Count orders by status (from all orders, not just today's)
+      const pendingCount = orders.filter(o => o.status === 'pending').length;
+      const preparingCount = orders.filter(o => o.status === 'preparing').length;
+      const outForDeliveryCount = orders.filter(o => o.status === 'out-for-delivery').length;
+      
+      // Count today's completed orders - orders completed today (regardless of when placed)
+      const completedTodayCount = orders.filter(order => {
+        // Check if order was completed today
+        if (order.status !== 'completed') return false;
+        
+        // Use completedAt date if available, otherwise use order date
+        const completionDate = order.completedAt ? 
+          new Date(order.completedAt).toISOString().split('T')[0] : 
+          new Date(order.date).toISOString().split('T')[0];
+          
+        return completionDate === today;
+      }).length;
+      
+      document.getElementById('total-orders').textContent = todayOrders.length;
+      document.getElementById('pending-orders').textContent = pendingCount;
+      document.getElementById('preparing-orders').textContent = preparingCount;
+      document.getElementById('out-for-delivery-orders').textContent = outForDeliveryCount;
+      document.getElementById('completed-orders').textContent = completedTodayCount;
+    }
+
+    function displayOrders(orders, filter) {
+      const container = document.getElementById('orders-list');
+      let filteredOrders = orders;
+
+      if (filter !== 'all') {
+        filteredOrders = orders.filter(order => order.status === filter);
+      }
+
+      // Sort by date (newest first)
+      filteredOrders.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA;
+      });
+
+      if (filteredOrders.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>No orders found</h3>
+            <p>There are no orders matching your filter.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filteredOrders.map(order => {
+        const orderDate = new Date(order.date);
+        const formattedDate = orderDate.toLocaleDateString() + ' ' + orderDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        // Show completion date if order is completed
+        let completionInfo = '';
+        if (order.status === 'completed' && order.completedAt) {
+          const completedDate = new Date(order.completedAt);
+          completionInfo = `<p class="completion-date">Completed: ${completedDate.toLocaleDateString()} ${completedDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>`;
+        }
+        
+        return `
+        <div class="order-card" data-order-id="${order.id}">
+          <div class="order-header">
+            <div>
+              <strong>Order #${order.id}</strong>
+              <p>Customer: ${order.customerName} • ${formattedDate}</p>
+              ${completionInfo}
+            </div>
+            <div class="current-status">
+              <span class="status-badge status-${order.status}">
+                ${order.status.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+              </span>
+            </div>
+          </div>
+          
+          <div class="order-items">
+            ${order.items.map(item => `
+              <div class="order-item">
+                <span>${item.name} x${item.quantity}</span>
+                <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="order-footer">
+            <strong>Total: ₱${order.total.toFixed(2)}</strong>
+            <div class="status-controls">
+              <select class="status-select" id="status-select-${order.id}">
+                <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                <option value="preparing" ${order.status === 'preparing' ? 'selected' : ''}>Preparing</option>
+                <option value="ready" ${order.status === 'ready' ? 'selected' : ''}>Ready</option>
+                <option value="out-for-delivery" ${order.status === 'out-for-delivery' ? 'selected' : ''}>Out for Delivery</option>
+                <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
+              </select>
+              <button class="update-btn" onclick="updateOrderStatus('${order.id}')">
+                <i class="fas fa-sync-alt"></i> Update
+              </button>
+            </div>
+          </div>
+        </div>
+      `}).join('');
+    }
+
+    function setupFilters() {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          loadOrders(this.dataset.filter);
+        });
+      });
+    }
+
+    function updateOrderStatus(orderId) {
+      const orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+      const adminOrders = JSON.parse(localStorage.getItem('orders')) || [];
+      const orderIndex = orders.findIndex(order => order.id === orderId);
+      const adminOrderIndex = adminOrders.findIndex(order => order.id === orderId);
+      const newStatus = document.getElementById(`status-select-${orderId}`).value;
+      
+      if (orderIndex !== -1) {
+        orders[orderIndex].status = newStatus;
+        orders[orderIndex].updatedAt = new Date().toISOString();
+        
+        // Track when order was completed
+        if (newStatus === 'completed') {
+          orders[orderIndex].completedAt = new Date().toISOString();
+          
+          // Update today's sales analytics
+          updateTodaySalesAnalytics(orders[orderIndex]);
+        }
+        
+        localStorage.setItem('customerOrders', JSON.stringify(orders));
+        
+        // Also update admin orders
+        if (adminOrderIndex !== -1) {
+          adminOrders[adminOrderIndex].status = newStatus;
+          adminOrders[adminOrderIndex].updatedAt = new Date().toISOString();
+          if (newStatus === 'completed') {
+            adminOrders[adminOrderIndex].completedAt = new Date().toISOString();
+          }
+          localStorage.setItem('orders', JSON.stringify(adminOrders));
+        }
+        
+        showNotification(`Order #${orderId} status updated to ${newStatus.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`);
+        loadOrders(document.querySelector('.filter-btn.active').dataset.filter);
+      }
+    }
+
+    // Function to update today's sales analytics
+    function updateTodaySalesAnalytics(completedOrder) {
+      // Get today's date for comparison
+      const today = new Date().toISOString().split('T')[0];
+      const orderDate = new Date(completedOrder.completedAt || completedOrder.date).toISOString().split('T')[0];
+      
+      // Only update if order was completed today
+      if (orderDate === today) {
+        // Get existing analytics data
+        let analyticsData = JSON.parse(localStorage.getItem('salesAnalytics')) || {
+          dailySales: {},
+          productSales: {},
+          categorySales: {},
+          totalRevenue: 0,
+          totalOrders: 0
+        };
+        
+        // Initialize today's data if not exists
+        if (!analyticsData.dailySales[today]) {
+          analyticsData.dailySales[today] = {
+            revenue: 0,
+            orders: 0,
+            averageOrderValue: 0
+          };
+        }
+        
+        // Update today's sales data
+        analyticsData.dailySales[today].revenue += completedOrder.total;
+        analyticsData.dailySales[today].orders += 1;
+        analyticsData.dailySales[today].averageOrderValue = 
+          analyticsData.dailySales[today].revenue / analyticsData.dailySales[today].orders;
+        
+        // Update product sales
+        completedOrder.items.forEach(item => {
+          if (!analyticsData.productSales[item.name]) {
+            analyticsData.productSales[item.name] = 0;
+          }
+          analyticsData.productSales[item.name] += item.quantity;
+        });
+        
+        // Update total analytics
+        analyticsData.totalRevenue += completedOrder.total;
+        analyticsData.totalOrders += 1;
+        
+        // Save updated analytics
+        localStorage.setItem('salesAnalytics', JSON.stringify(analyticsData));
+        
+        console.log('Sales analytics updated for today:', analyticsData.dailySales[today]);
+      }
+    }
+
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Authentication - Why Pie? Bake Good And Treat</title>
+  
+  <!-- Font Imports -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --admin-primary: #654321;
+      --admin-secondary: #8B4513;
+      --admin-accent: #A0522D;
+      --admin-light: #FFF8F0;
+      --admin-gradient: linear-gradient(135deg, #654321 0%, #8B4513 50%, #A0522D 100%);
+      --admin-shadow: 0 8px 32px rgba(101, 67, 33, 0.15);
+      --text-color: #333;
+      --text-light: #666;
+      --border-color: #e8e2d6;
+    }
+
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--admin-light);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: var(--admin-gradient);
+      border-radius: 0 0 50% 50%;
+      transform: scale(1.5);
+    }
+
+    .auth-card {
+      background: white;
+      padding: 3rem;
+      border-radius: 24px;
+      box-shadow: var(--admin-shadow);
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      z-index: 2;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-top: 4px solid var(--admin-primary);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .auth-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-logo img {
+      height: 60px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .auth-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: var(--admin-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .auth-title {
+      background: var(--admin-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      font-size: 2.2rem;
+    }
+
+    .auth-subtitle {
+      color: var(--text-light);
+      margin-bottom: 0;
+      font-size: 1.1rem;
+    }
+
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 2rem;
+      background: var(--admin-light);
+      border-radius: 16px;
+      padding: 4px;
+      position: relative;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-tab.active {
+      color: white;
+      background: var(--admin-gradient);
+      box-shadow: 0 4px 12px rgba(101, 67, 33, 0.3);
+    }
+
+    .auth-form {
+      display: none;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    .auth-form.active {
+      display: block;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-color);
+      font-size: 0.95rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      border: 2px solid #e8e2d6;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      background: var(--admin-light);
+      font-size: 1rem;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--admin-primary);
+      box-shadow: 0 0 0 3px rgba(101, 67, 33, 0.1);
+      background: white;
+    }
+
+    .form-icon {
+      position: absolute;
+      left: 1rem;
+      top: 2.6rem;
+      color: var(--admin-primary);
+      font-size: 1.1rem;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .remember-me input {
+      margin: 0;
+      accent-color: var(--admin-primary);
+    }
+
+    .forgot-password {
+      color: var(--admin-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .forgot-password:hover {
+      color: var(--admin-accent);
+      text-decoration: underline;
+    }
+
+    .auth-button {
+      width: 100%;
+      margin-bottom: 1.5rem;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      background: var(--admin-gradient);
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .auth-button:hover::before {
+      left: 100%;
+    }
+
+    .auth-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(101, 67, 33, 0.4);
+    }
+
+    .back-to-home {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .back-to-home a {
+      color: var(--admin-primary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+
+    .back-to-home a:hover {
+      background: var(--admin-light);
+      transform: translateX(-5px);
+    }
+
+    .error-message {
+      background: linear-gradient(135deg, #fee 0%, #fff0f0 100%);
+      color: #c33;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #c33;
+      display: none;
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .error-message.active {
+      display: block;
+    }
+
+    .floating-security {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .security {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.1;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .security:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+    .security:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+    .security:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 2s; }
+    .security:nth-child(4) { bottom: 15%; right: 20%; animation-delay: 3s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+
+    .security-info {
+      background: rgba(101, 67, 33, 0.05);
+      border: 1px solid rgba(101, 67, 33, 0.1);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      text-align: center;
+    }
+
+    .security-info i {
+      color: var(--admin-primary);
+      margin-right: 0.5rem;
+    }
+
+    .login-links {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .login-links p {
+      margin-bottom: 1rem;
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .login-link-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .login-link-btn {
+      padding: 0.7rem 1.5rem;
+      border: 2px solid var(--admin-primary);
+      border-radius: 8px;
+      color: var(--admin-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .login-link-btn:hover {
+      background: var(--admin-primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .login-link-btn.customer {
+      border-color: #8B4513;
+      color: #8B4513;
+    }
+
+    .login-link-btn.customer:hover {
+      background: #8B4513;
+      color: white;
+    }
+
+    .login-link-btn.staff {
+      border-color: #D2691E;
+      color: #D2691E;
+    }
+
+    .login-link-btn.staff:hover {
+      background: #D2691E;
+      color: white;
+    }
+
+    /* Success Message */
+    .success-message {
+      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+      color: #2e7d32;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #4caf50;
+      display: none;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    .success-message.active {
+      display: block;
+    }
+
+    /* Password Strength Indicator */
+    .password-strength {
+      margin-top: 0.5rem;
+      height: 6px;
+      border-radius: 3px;
+      background: #eee;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0;
+      transition: all 0.3s ease;
+      border-radius: 3px;
+    }
+
+    .password-strength-text {
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+      text-align: right;
+      color: var(--text-light);
+    }
+
+    .password-weak .password-strength-bar {
+      background: #ff4d4d;
+      width: 25%;
+    }
+
+    .password-fair .password-strength-bar {
+      background: #ffa500;
+      width: 50%;
+    }
+
+    .password-good .password-strength-bar {
+      background: #4caf50;
+      width: 75%;
+    }
+
+    .password-strong .password-strength-bar {
+      background: #2e7d32;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .auth-container::before {
+        transform: scale(2);
+      }
+      
+      .auth-card {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+      }
+      
+      .auth-title {
+        font-size: 1.8rem;
+      }
+      
+      .form-options {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .login-link-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .auth-container {
+        padding: 1rem;
+      }
+      
+      .auth-card {
+        padding: 1.5rem;
+      }
+      
+      .auth-title {
+        font-size: 1.5rem;
+      }
+      
+      .auth-tab {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .login-link-btn {
+        width: 200px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <!-- Floating Security Decorations -->
+    <div class="floating-security">
+      <div class="security">🔒</div>
+      <div class="security">🛡️</div>
+      <div class="security">⚙️</div>
+      <div class="security">📊</div>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">
+          <img src="why pie logo.png" alt="Why Pie? Logo">
+          <div class="auth-logo-text">Why Pie?</div>
+        </div>
+        <h1 class="auth-title">Admin Portal</h1>
+        <p class="auth-subtitle">System administration access</p>
+      </div>
+
+      <!-- Authentication Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="signup">Sign Up</button>
+      </div>
+
+      <!-- Error Message -->
+      <div class="error-message" id="error-message"></div>
+
+      <!-- Success Message -->
+      <div class="success-message" id="success-message"></div>
+
+      <!-- Login Form -->
+      <form class="auth-form active" id="login-form">
+        <div class="form-group">
+          <label for="login-email">Admin Email</label>
+          <i class="fas fa-envelope form-icon"></i>
+          <input type="email" id="login-email" required placeholder="Enter admin email">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <i class="fas fa-lock form-icon"></i>
+          <input type="password" id="login-password" required placeholder="Enter admin password">
+        </div>
+        <div class="form-group">
+          <label for="login-security-code">Security Code</label>
+          <i class="fas fa-shield-alt form-icon"></i>
+          <input type="password" id="login-security-code" required placeholder="Enter security code" maxlength="9">
+        </div>
+        
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="remember-me">
+            Remember me
+          </label>
+          <a href="forgot-password.html?from=admin-login.html" class="forgot-password">Forgot password?</a>
+        </div>
+
+        <div class="security-info">
+          <i class="fas fa-info-circle"></i>
+          Restricted access - Master security code required
+        </div>
+
+        <button type="submit" class="auth-button">
+          <i class="fas fa-sign-in-alt"></i> Access Admin Portal
+        </button>
+      </form>
+
+      <!-- Signup Form -->
+      <form class="auth-form" id="signup-form">
+        <div class="form-group">
+          <label for="signup-name">Full Name</label>
+          <i class="fas fa-user form-icon"></i>
+          <input type="text" id="signup-name" required placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+          <label for="signup-email">Admin Email</label>
+          <i class="fas fa-envelope form-icon"></i>
+          <input type="email" id="signup-email" required placeholder="Enter admin email">
+        </div>
+        <div class="form-group">
+          <label for="signup-phone">Phone Number</label>
+          <i class="fas fa-phone form-icon"></i>
+          <input type="tel" id="signup-phone" required placeholder="Enter your phone number">
+        </div>
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <i class="fas fa-lock form-icon"></i>
+          <input type="password" id="signup-password" required placeholder="Create a password (min. 8 characters)">
+          <div class="password-strength" id="password-strength">
+            <div class="password-strength-bar"></div>
+          </div>
+          <div class="password-strength-text" id="password-strength-text"></div>
+        </div>
+        <div class="form-group">
+          <label for="signup-confirm-password">Confirm Password</label>
+          <i class="fas fa-lock form-icon"></i>
+          <input type="password" id="signup-confirm-password" required placeholder="Confirm your password">
+        </div>
+        <div class="form-group">
+          <label for="signup-security-code">Master Security Code</label>
+          <i class="fas fa-shield-alt form-icon"></i>
+          <input type="password" id="signup-security-code" required placeholder="Enter master security code" maxlength="9">
+        </div>
+
+        <div class="security-info">
+          <i class="fas fa-exclamation-triangle"></i>
+          Admin accounts require master security code and system authorization
+        </div>
+
+        <button type="submit" class="auth-button">
+          <i class="fas fa-user-plus"></i> Create Admin Account
+        </button>
+      </form>
+
+      <!-- Login Links Section -->
+      <div class="login-links">
+        <p>Looking for customer or staff login?</p>
+        <div class="login-link-buttons">
+          <a href="customer-login.html" class="login-link-btn customer">
+            <i class="fas fa-user"></i> Customer Login
+          </a>
+          <a href="staff-login.html" class="login-link-btn staff">
+            <i class="fas fa-utensils"></i> Staff Login
+          </a>
+        </div>
+      </div>
+
+      <div class="back-to-home">
+        <a href="index.html">
+          <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // User management functions
+    function getUsers() {
+      return JSON.parse(localStorage.getItem('users')) || [];
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+
+    function getCurrentUser() {
+      return JSON.parse(localStorage.getItem('currentUser'));
+    }
+
+    function setCurrentUser(user) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+    }
+
+    function loginUser(email, password) {
+      const users = getUsers();
+      const user = users.find(u => u.email === email && u.password === password);
+      
+      if (user) {
+        setCurrentUser(user);
+        return { success: true, user };
+      } else {
+        return { success: false, message: 'Invalid email or password' };
+      }
+    }
+
+    function registerUser(userData) {
+      const users = getUsers();
+      
+      // Check if user already exists
+      if (users.find(u => u.email === userData.email)) {
+        return { success: false, message: 'User with this email already exists' };
+      }
+      
+      // Add new user
+      users.push(userData);
+      saveUsers(users);
+      setCurrentUser(userData);
+      
+      return { success: true };
+    }
+
+    // Main script
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.auth-tab');
+      const forms = document.querySelectorAll('.auth-form');
+      const loginForm = document.getElementById('login-form');
+      const signupForm = document.getElementById('signup-form');
+      const errorMessage = document.getElementById('error-message');
+      const successMessage = document.getElementById('success-message');
+      const passwordInput = document.getElementById('signup-password');
+      const passwordStrength = document.getElementById('password-strength');
+      const passwordStrengthText = document.getElementById('password-strength-text');
+
+      // Check if user is already logged in as admin
+      const currentUser = getCurrentUser();
+      const isAdminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+      
+      if (currentUser && currentUser.role === 'admin' && isAdminLoggedIn) {
+        // User is already logged in as admin, redirect to dashboard
+        window.location.href = 'admin-dashboard.html';
+        return;
+      }
+
+      // Tab switching
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          const tabName = this.getAttribute('data-tab');
+          switchTab(tabName);
+        });
+      });
+
+      function switchTab(tabName) {
+        // Update tabs
+        tabs.forEach(tab => {
+          tab.classList.toggle('active', tab.getAttribute('data-tab') === tabName);
+        });
+
+        // Update forms
+        forms.forEach(form => {
+          form.classList.toggle('active', form.id === `${tabName}-form`);
+        });
+
+        // Clear error message
+        hideError();
+        hideSuccess();
+      }
+
+      function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.classList.add('active');
+        successMessage.classList.remove('active');
+      }
+
+      function hideError() {
+        errorMessage.classList.remove('active');
+      }
+
+      function showSuccess(message) {
+        successMessage.textContent = message;
+        successMessage.classList.add('active');
+        errorMessage.classList.remove('active');
+      }
+
+      function hideSuccess() {
+        successMessage.classList.remove('active');
+      }
+
+      // Password strength indicator
+      passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        const strength = calculatePasswordStrength(password);
+        
+        passwordStrength.className = 'password-strength';
+        
+        if (password.length > 0) {
+          passwordStrength.classList.add(`password-${strength.level}`);
+          passwordStrengthText.textContent = strength.text;
+        } else {
+          passwordStrengthText.textContent = '';
+        }
+      });
+
+      function calculatePasswordStrength(password) {
+        let score = 0;
+        
+        if (password.length >= 8) score += 1;
+        if (password.length >= 12) score += 1;
+        
+        if (/[a-z]/.test(password)) score += 1;
+        if (/[A-Z]/.test(password)) score += 1;
+        if (/[0-9]/.test(password)) score += 1;
+        if (/[^a-zA-Z0-9]/.test(password)) score += 1;
+        
+        if (score <= 2) {
+          return { level: 'weak', text: 'Weak password' };
+        } else if (score <= 4) {
+          return { level: 'fair', text: 'Fair password' };
+        } else if (score <= 6) {
+          return { level: 'good', text: 'Good password' };
+        } else {
+          return { level: 'strong', text: 'Strong password' };
+        }
+      }
+
+      // Login form submission
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const securityCode = document.getElementById('login-security-code').value;
+
+        if (!email || !password || !securityCode) {
+          showError('Please fill in all fields');
+          return;
+        }
+
+        const result = loginUser(email, password);
+        
+        if (result.success) {
+          if (result.user.role === 'admin') {
+            // Check security code
+            if (securityCode === "ADMIN2024") {
+              showSuccess('Admin login successful! Redirecting...');
+              setTimeout(() => {
+                // Set admin logged in flag
+                localStorage.setItem('adminLoggedIn', 'true');
+                // Redirect to admin dashboard
+                window.location.href = 'admin-dashboard.html';
+              }, 1000);
+            } else {
+              showError('Invalid security code');
+            }
+          } else {
+            showError('This login is for administrators only. Please use the appropriate login page.');
+          }
+        } else {
+          showError(result.message);
+        }
+      });
+
+      // Signup form submission
+      signupForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const phone = document.getElementById('signup-phone').value;
+        const password = document.getElementById('signup-password').value;
+        const confirmPassword = document.getElementById('signup-confirm-password').value;
+        const securityCode = document.getElementById('signup-security-code').value;
+
+        // Validation
+        if (!name || !email || !phone || !password || !confirmPassword || !securityCode) {
+          showError('Please fill in all fields');
+          return;
+        }
+
+        if (!validateEmail(email)) {
+          showError('Please enter a valid email address');
+          return;
+        }
+
+        if (!validatePassword(password)) {
+          showError('Password must be at least 8 characters long');
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showError('Passwords do not match');
+          return;
+        }
+
+        if (securityCode !== "ADMIN2024") {
+          showError('Invalid master security code. Admin account creation requires authorization.');
+          return;
+        }
+
+        const userData = {
+          name,
+          email,
+          phone,
+          password,
+          role: 'admin',
+          address: 'Admin Address'
+        };
+
+        const result = registerUser(userData);
+        
+        if (result.success) {
+          // Set admin logged in flag
+          localStorage.setItem('adminLoggedIn', 'true');
+          
+          showSuccess('Admin account created successfully! Redirecting...');
+          setTimeout(() => {
+            window.location.href = 'admin-dashboard.html';
+          }, 1000);
+        } else {
+          showError(result.message);
+        }
+      });
+
+      // Add input formatting for security code
+      const securityCodeInputs = document.querySelectorAll('input[type="password"][id*="security-code"]');
+      securityCodeInputs.forEach(input => {
+        input.addEventListener('input', function() {
+          this.value = this.value.toUpperCase();
+        });
+      });
+
+      // Utility functions
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+
+      function validatePassword(password) {
+        return password.length >= 8;
+      }
+    });
+  </script>
+</body>
+</html>

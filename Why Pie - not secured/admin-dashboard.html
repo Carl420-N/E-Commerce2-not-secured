@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard - Why Pie? Bake Good And Treat</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Oswald:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #FDF5E6;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .navbar {
+      background-color: #8B4513;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-image {
+      height: 40px;
+      width: auto;
+    }
+
+    .logo-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.5rem;
+      color: #FFF8DC;
+    }
+
+    .navbar ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #FFF8DC;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .navbar a:hover, .navbar a.active {
+      color: #FFD700;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-role {
+      background: #FFD700;
+      color: #8B4513;
+      padding: 0.25rem 0.75rem;
+      border-radius: 15px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .dashboard-header {
+      background: #8B4513;
+      color: #FFF8DC;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .welcome-message {
+      text-align: center;
+    }
+
+    .welcome-message h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome-message p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: #FAF0E6;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      border-left: 4px solid #8B4513;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+
+    .stat-card i {
+      font-size: 2.5rem;
+      color: #8B4513;
+      margin-bottom: 1rem;
+    }
+
+    .stat-card h3 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    .stat-card p {
+      color: #666;
+    }
+
+    .analytics-section {
+      margin-bottom: 2rem;
+    }
+
+    .analytics-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .analytics-header h2 {
+      font-family: 'Oswald', sans-serif;
+      color: #333;
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 992px) {
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .analytics-card {
+      background: #FAF0E6;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .analytics-card h3 {
+      font-family: 'Oswald', sans-serif;
+      margin-bottom: 1rem;
+      color: #333;
+      border-bottom: 1px solid #E6D6C2;
+      padding-bottom: 0.5rem;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    .analytics-filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .filter-group label {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .filter-group select {
+      padding: 0.5rem;
+      border: 1px solid #E6D6C2;
+      border-radius: 5px;
+      background-color: #FFF;
+    }
+
+    .analytics-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .summary-item {
+      background: #FFF8DC;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      border-left: 3px solid #8B4513;
+    }
+
+    .summary-item h4 {
+      font-size: 0.875rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .summary-item p {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .top-products-list {
+      list-style: none;
+    }
+
+    .top-product-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #E6D6C2;
+    }
+
+    .top-product-item:last-child {
+      border-bottom: none;
+    }
+
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .product-rank {
+      background: #8B4513;
+      color: #FFF8DC;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .product-sales {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .admin-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .admin-sections {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .section-card {
+      background: #FAF0E6;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #E6D6C2;
+    }
+
+    .section-header h2 {
+      font-family: 'Oswald', sans-serif;
+      color: #333;
+    }
+
+    .menu-item, .user-item, .account-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid #E6D6C2;
+      transition: background-color 0.3s;
+      cursor: pointer;
+    }
+
+    .menu-item:hover, .user-item:hover, .account-item:hover {
+      background-color: #FFEFD5;
+    }
+
+    .menu-item:last-child, .user-item:last-child, .account-item:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item-details, .user-item-details, .account-item-details {
+      flex: 1;
+    }
+
+    .menu-item-details strong, .user-item-details strong, .account-item-details strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .menu-item-details p, .user-item-details p, .account-item-details p {
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+
+    .menu-item-details small, .user-item-details small, .account-item-details small {
+      color: #888;
+      font-size: 0.875rem;
+    }
+
+    .item-actions, .user-actions, .account-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .btn-edit { 
+      background: #8B4513;
+      color: #FFF8DC;
+    }
+
+    .btn-edit:hover { 
+      background: #6B3410;
+      transform: translateY(-2px);
+    }
+
+    .btn-delete { 
+      background: #A52A2A;
+      color: #FFF8DC;
+    }
+
+    .btn-delete:hover { 
+      background: #8B0000;
+      transform: translateY(-2px);
+    }
+
+    .btn-add { 
+      background: #8B4513;
+      color: #FFF8DC;
+    }
+
+    .btn-add:hover { 
+      background: #6B3410;
+      transform: translateY(-2px);
+    }
+
+    .btn-save { 
+      background: #8B4513;
+      color: #FFF8DC;
+    }
+
+    .btn-save:hover { 
+      background: #6B3410;
+    }
+
+    .btn-cancel { 
+      background: #9e9e9e;
+      color: white;
+    }
+
+    .btn-cancel:hover { 
+      background: #757575;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #8B4513;
+      color: #8B4513;
+    }
+
+    .btn-outline:hover {
+      background: #8B4513;
+      color: #FFF8DC;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #FAF0E6;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+      transition: color 0.3s;
+    }
+
+    .close-modal:hover {
+      color: #333;
+    }
+
+    .modal h3 {
+      margin-bottom: 1.5rem;
+      font-family: 'Oswald', sans-serif;
+      color: #333;
+      padding-right: 2rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #E6D6C2;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      background-color: #FFF;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #8B4513;
+      box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
+
+    .user-role-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+
+    .role-admin { background: #8B4513; color: #FFF8DC; }
+    .role-staff { background: #FFD700; color: #8B4513; }
+    .role-customer { background: #3E2723; color: #FAFAFA; }
+
+    footer {
+      background: #3E2723;
+      color: #FAFAFA;
+      padding: 2rem 0 0;
+      margin-top: 3rem;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-section h3 {
+      font-family: 'Oswald', sans-serif;
+      margin-bottom: 1rem;
+      color: #FFB74D;
+    }
+
+    .copyright {
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-top: 1px solid #5D4037;
+      font-size: 0.875rem;
+      color: #BCAAA4;
+    }
+
+    .custom-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      z-index: 10000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      color: white;
+      font-weight: 500;
+    }
+
+    .custom-notification.success {
+      background: #4CAF50;
+    }
+
+    .custom-notification.error {
+      background: #f44336;
+    }
+
+    /* Order Management Styles */
+    .orders-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #E6D6C2;
+    }
+    
+    .order-tab {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.3s ease;
+    }
+    
+    .order-tab.active {
+      color: #8B4513;
+      border-bottom-color: #8B4513;
+    }
+    
+    .order-tab-content {
+      display: none;
+    }
+    
+    .order-tab-content.active {
+      display: block;
+    }
+    
+    .order-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-left: 4px solid #8B4513;
+    }
+    
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .order-info h4 {
+      color: #8B4513;
+      margin-bottom: 0.5rem;
+    }
+    
+    .order-meta {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .order-status {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .status-delivered { background: #D4EDDA; color: #155724; }
+    .status-completed { background: #D1ECF1; color: #0C5460; }
+    .status-pending { background: #FFF3CD; color: #856404; }
+    
+    .order-items {
+      margin-bottom: 1rem;
+    }
+    
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #E6D6C2;
+    }
+    
+    .order-total {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #8B4513;
+    }
+    
+    .order-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    /* Scrollable Orders Container */
+    .scrollable-orders {
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid #E6D6C2;
+      border-radius: 8px;
+      padding: 1rem;
+      background: white;
+    }
+    
+    .scrollable-orders::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .scrollable-orders::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    
+    .scrollable-orders::-webkit-scrollbar-thumb {
+      background: #8B4513;
+      border-radius: 4px;
+    }
+    
+    .scrollable-orders::-webkit-scrollbar-thumb:hover {
+      background: #6B3410;
+    }
+    
+    /* Image Upload Styles */
+    .image-preview {
+      width: 100px;
+      height: 100px;
+      border: 2px dashed #E6D6C2;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    
+    .image-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .file-input-wrapper input[type=file] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-wrapper .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* Real-time update indicator */
+    .real-time-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      color: #4CAF50;
+      margin-left: 10px;
+    }
+
+    /* Account Management Styles */
+    .account-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .account-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container">
+      <div class="logo-container">
+        <img src="why pie logo.png" alt="Why Pie? Logo" class="logo-image" onerror="this.src='https://via.placeholder.com/40x40/8B4513/FFF8DC?text=WP'">
+        <div class="logo-text">Why Pie? Bake Good And Treat</div>
+      </div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="admin-dashboard.html" class="active">Dashboard</a></li>
+        <li id="user-nav">
+          <div class="user-info">
+            <span id="user-name">Admin</span>
+            <span class="user-role" id="user-role">Admin</span>
+            <a href="#" id="logout-btn">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+      <div class="container">
+        <div class="welcome-message">
+          <h1>Admin Dashboard</h1>
+          <p>Manage menu items, orders, accounts, and view analytics</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard">
+      <div class="container">
+        <!-- Quick Stats -->
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <h3 id="total-users">0</h3>
+            <p>Total Users</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-utensils"></i>
+            <h3 id="total-items">0</h3>
+            <p>Menu Items</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-chart-line"></i>
+            <h3 id="total-revenue">₱0</h3>
+            <p>Total Revenue</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-shopping-cart"></i>
+            <h3 id="total-orders">0</h3>
+            <p>Total Orders</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-check-circle"></i>
+            <h3 id="delivered-orders">0</h3>
+            <p>Delivered Orders</p>
+          </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="analytics-section">
+          <div class="analytics-header">
+            <h2>Order Analytics</h2>
+            <div class="real-time-indicator">
+              <i class="fas fa-sync-alt"></i>
+              <span>Live Updates</span>
+            </div>
+          </div>
+          <div class="analytics-grid">
+            <div class="analytics-card">
+              <h3>Revenue Overview</h3>
+              <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+              </div>
+              <div class="analytics-summary">
+                <div class="summary-item">
+                  <h4>Today's Revenue</h4>
+                  <p id="today-revenue">₱0</p>
+                </div>
+                <div class="summary-item">
+                  <h4>This Week</h4>
+                  <p id="week-revenue">₱0</p>
+                </div>
+                <div class="summary-item">
+                  <h4>This Month</h4>
+                  <p id="month-revenue">₱0</p>
+                </div>
+                <div class="summary-item">
+                  <h4>Total Revenue</h4>
+                  <p id="total-revenue-analytics">₱0</p>
+                </div>
+              </div>
+            </div>
+            <div class="analytics-card">
+              <h3>Top Products</h3>
+              <ul class="top-products-list" id="top-products">
+                <!-- Top products will be loaded here -->
+              </ul>
+              <div class="analytics-summary">
+                <div class="summary-item">
+                  <h4>Best Seller</h4>
+                  <p id="best-seller">-</p>
+                </div>
+                <div class="summary-item">
+                  <h4>Top Category</h4>
+                  <p id="top-category">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Sections -->
+        <div class="admin-sections">
+          <!-- Order Management -->
+          <div class="section-card">
+            <div class="section-header">
+              <h2>Recent Orders</h2>
+            </div>
+            
+            <div class="orders-tabs">
+              <button class="order-tab active" data-tab="completed">Complete Orders</button>
+            </div>
+            
+            <div class="order-tab-content active" id="completed-orders">
+              <div class="scrollable-orders" id="completed-orders-list">
+                <!-- Complete orders will be loaded here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Menu Management -->
+          <div class="section-card">
+            <div class="section-header">
+              <h2>Menu Management</h2>
+              <button class="btn btn-add" onclick="adminManager.showAddItemModal()">
+                <i class="fas fa-plus"></i> Add Item
+              </button>
+            </div>
+            <div id="menu-items-list">
+              <!-- Menu items will be loaded here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Management -->
+        <div class="section-card">
+          <div class="section-header">
+            <h2>Account Management</h2>
+            <button class="btn btn-add" onclick="adminManager.showAddAccountModal()">
+              <i class="fas fa-plus"></i> Add Account
+            </button>
+          </div>
+          <div id="accounts-list">
+            <!-- Accounts will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add Menu Item Modal -->
+  <div class="modal" id="add-item-modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="adminManager.closeModal('add-item-modal')">&times;</button>
+      <h3>Add Menu Item</h3>
+      <form id="add-item-form">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="item-name" required placeholder="Enter item name">
+        </div>
+        <div class="form-group">
+          <label>Price</label>
+          <input type="number" id="item-price" step="0.01" required placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="item-category" required>
+            <option value="">Select Category</option>
+            <option value="fruit">Fruit Pie</option>
+            <option value="cream">Cream Pie</option>
+            <option value="special">Specialty Pie</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="item-description" rows="3" required placeholder="Enter item description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Image</label>
+          <div class="file-input-wrapper">
+            <button type="button" class="btn btn-outline">
+              <i class="fas fa-upload"></i> Choose Image
+            </button>
+            <input type="file" id="item-image" accept="image/*" required>
+          </div>
+          <div class="image-preview" id="image-preview">
+            <i class="fas fa-image" style="color: #ccc; font-size: 2rem;"></i>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-cancel" onclick="adminManager.closeModal('add-item-modal')">Cancel</button>
+          <button type="submit" class="btn btn-save">Add Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Menu Item Modal -->
+  <div class="modal" id="edit-item-modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="adminManager.closeModal('edit-item-modal')">&times;</button>
+      <h3>Edit Menu Item</h3>
+      <form id="edit-item-form">
+        <input type="hidden" id="edit-item-id">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="edit-item-name" required placeholder="Enter item name">
+        </div>
+        <div class="form-group">
+          <label>Price</label>
+          <input type="number" id="edit-item-price" step="0.01" required placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="edit-item-category" required>
+            <option value="">Select Category</option>
+            <option value="fruit">Fruit Pie</option>
+            <option value="cream">Cream Pie</option>
+            <option value="special">Specialty Pie</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="edit-item-description" rows="3" required placeholder="Enter item description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Image</label>
+          <div class="file-input-wrapper">
+            <button type="button" class="btn btn-outline">
+              <i class="fas fa-upload"></i> Change Image
+            </button>
+            <input type="file" id="edit-item-image" accept="image/*">
+          </div>
+          <div class="image-preview" id="edit-image-preview">
+            <i class="fas fa-image" style="color: #ccc; font-size: 2rem;"></i>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-cancel" onclick="adminManager.closeModal('edit-item-modal')">Cancel</button>
+          <button type="submit" class="btn btn-save">Update Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Account Modal -->
+  <div class="modal" id="add-account-modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="adminManager.closeModal('add-account-modal')">&times;</button>
+      <h3>Add Account</h3>
+      <form id="add-account-form">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="account-name" required placeholder="Enter full name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="account-email" required placeholder="Enter email address">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="account-password" required placeholder="Enter password">
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select id="account-role" required>
+            <option value="">Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="staff">Staff</option>
+            <option value="customer">Customer</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-cancel" onclick="adminManager.closeModal('add-account-modal')">Cancel</button>
+          <button type="submit" class="btn btn-save">Add Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Account Modal -->
+  <div class="modal" id="edit-account-modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="adminManager.closeModal('edit-account-modal')">&times;</button>
+      <h3>Edit Account</h3>
+      <form id="edit-account-form">
+        <input type="hidden" id="edit-account-id">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="edit-account-name" required placeholder="Enter full name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="edit-account-email" required placeholder="Enter email address">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="edit-account-password" placeholder="Leave blank to keep current password">
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select id="edit-account-role" required>
+            <option value="">Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="staff">Staff</option>
+            <option value="customer">Customer</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-cancel" onclick="adminManager.closeModal('edit-account-modal')">Cancel</button>
+          <button type="submit" class="btn btn-save">Update Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Why Pie?</h3>
+        <p>Bake Good And Treat - Delicious homemade pies made with love and the finest ingredients.</p>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2023 Why Pie? Bake Good And Treat. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Admin Manager - All functions in one file
+    const adminManager = {
+      // Initialize the dashboard
+      init: function() {
+        // Check authentication
+        const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        
+        if (!isLoggedIn || !currentUser || currentUser.role !== 'admin') {
+          window.location.href = 'admin-login.html';
+          return;
+        }
+
+        // Update user info
+        document.getElementById('user-name').textContent = currentUser.name || 'Admin';
+        
+        // Setup logout button
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+          e.preventDefault();
+          localStorage.removeItem('adminLoggedIn');
+          localStorage.removeItem('currentUser');
+          window.location.href = 'admin-login.html';
+        });
+
+        // Initialize data
+        this.initDemoData();
+        this.loadDashboardData();
+        this.loadMenuItems();
+        this.loadAccounts();
+        this.loadCompletedOrders();
+        
+        // Setup event listeners
+        this.setupEventListeners();
+        
+        // Initialize charts
+        this.initCharts();
+        
+        // Refresh data every 30 seconds
+        setInterval(() => {
+          this.loadDashboardData();
+          this.loadCompletedOrders();
+        }, 30000);
+      },
+
+      // Initialize demo data if needed
+      initDemoData: function() {
+        // Initialize menu items if none exist
+        let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+        if (menuItems.length === 0) {
+          const demoItems = [
+            {
+              id: '1',
+              name: 'Apple Pie',
+              price: 250,
+              category: 'fruit',
+              description: 'Classic apple pie with cinnamon and sugar',
+              image: 'why pie logo.png',
+              createdAt: new Date().toISOString()
+            },
+            {
+              id: '2',
+              name: 'Blueberry Pie',
+              price: 280,
+              category: 'fruit',
+              description: 'Fresh blueberry filling with flaky crust',
+              image: 'why pie logo.png',
+              createdAt: new Date().toISOString()
+            },
+            {
+              id: '3',
+              name: 'Chocolate Cream Pie',
+              price: 300,
+              category: 'cream',
+              description: 'Rich chocolate cream in a chocolate crust',
+              image: 'why pie logo.png',
+              createdAt: new Date().toISOString()
+            }
+          ];
+          localStorage.setItem('menuItems', JSON.stringify(demoItems));
+        }
+
+        // Initialize orders if none exist
+        let orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+        if (orders.length === 0) {
+          const demoOrders = [
+            {
+              id: 'ORD' + Date.now(),
+              customerEmail: 'customer@whypie.com',
+              items: [
+                { name: 'Apple Pie', quantity: 1, price: 250 },
+                { name: 'Blueberry Pie', quantity: 1, price: 280 }
+              ],
+              total: 530,
+              shippingFee: 0,
+              status: 'delivered',
+              timestamp: new Date().toISOString(),
+              address: '123 Main St, Mabini, Batangas',
+              paymentMethod: 'COD',
+              notes: 'Extra napkins please'
+            },
+            {
+              id: 'ORD' + (Date.now() + 1),
+              customerEmail: 'customer2@whypie.com',
+              items: [
+                { name: 'Chocolate Cream Pie', quantity: 2, price: 300 }
+              ],
+              total: 600,
+              shippingFee: 0,
+              status: 'delivered',
+              timestamp: new Date(Date.now() - 86400000).toISOString(),
+              address: '456 Oak St, Calaca, Batangas',
+              paymentMethod: 'GCash',
+              notes: ''
+            }
+          ];
+          localStorage.setItem('customerOrders', JSON.stringify(demoOrders));
+        }
+
+        // Initialize users if none exist
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        const defaultAdminExists = users.some(u => u.email === 'admin@whypie.com');
+        if (!defaultAdminExists) {
+          users.push({
+            id: 'admin_default',
+            name: 'System Administrator',
+            email: 'admin@whypie.com',
+            password: 'admin123',
+            role: 'admin',
+            phone: '+639000000001',
+            address: 'Bakery Headquarters',
+            createdAt: new Date().toISOString()
+          });
+          localStorage.setItem('users', JSON.stringify(users));
+        }
+      },
+
+      // Load dashboard data
+      loadDashboardData: function() {
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+        const orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+        
+        // Update stats
+        document.getElementById('total-users').textContent = users.length || '0';
+        document.getElementById('total-items').textContent = menuItems.length || '0';
+        
+        // Calculate total revenue from delivered/completed orders
+        const totalRevenue = orders
+          .filter(order => ['delivered', 'completed'].includes(order.status))
+          .reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0);
+        
+        document.getElementById('total-revenue').textContent = '₱' + (totalRevenue || 0).toFixed(2);
+        document.getElementById('total-orders').textContent = orders.length || '0';
+        
+        const deliveredOrders = orders.filter(order => 
+          ['delivered', 'completed'].includes(order.status)
+        ).length;
+        document.getElementById('delivered-orders').textContent = deliveredOrders || '0';
+        
+        // Update analytics
+        this.updateAnalytics(orders, menuItems);
+      },
+
+      // Update analytics
+      updateAnalytics: function(orders, menuItems) {
+        // Calculate today's revenue
+        const today = new Date().toDateString();
+        const todayRevenue = orders
+          .filter(order => {
+            const orderDate = new Date(order.timestamp || new Date()).toDateString();
+            return orderDate === today && ['delivered', 'completed'].includes(order.status);
+          })
+          .reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0);
+        
+        document.getElementById('today-revenue').textContent = '₱' + (todayRevenue || 0).toFixed(2);
+        
+        // Calculate week revenue (last 7 days)
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        const weekRevenue = orders
+          .filter(order => {
+            const orderDate = new Date(order.timestamp || new Date());
+            return orderDate >= weekAgo && ['delivered', 'completed'].includes(order.status);
+          })
+          .reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0);
+        
+        document.getElementById('week-revenue').textContent = '₱' + (weekRevenue || 0).toFixed(2);
+        
+        // Calculate month revenue (last 30 days)
+        const monthAgo = new Date();
+        monthAgo.setDate(monthAgo.getDate() - 30);
+        const monthRevenue = orders
+          .filter(order => {
+            const orderDate = new Date(order.timestamp || new Date());
+            return orderDate >= monthAgo && ['delivered', 'completed'].includes(order.status);
+          })
+          .reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0);
+        
+        document.getElementById('month-revenue').textContent = '₱' + (monthRevenue || 0).toFixed(2);
+        
+        // Total revenue
+        const totalRevenue = orders
+          .filter(order => ['delivered', 'completed'].includes(order.status))
+          .reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0);
+        
+        document.getElementById('total-revenue-analytics').textContent = '₱' + (totalRevenue || 0).toFixed(2);
+        
+        // Update top products
+        this.updateTopProducts(orders, menuItems);
+        
+        // Update chart
+        this.updateRevenueChart(orders);
+      },
+
+      // Update top products
+      updateTopProducts: function(orders, menuItems) {
+        // Count sales for each menu item
+        const salesCount = {};
+        orders.forEach(order => {
+          if (['delivered', 'completed'].includes(order.status)) {
+            (order.items || []).forEach(item => {
+              if (item && item.name) {
+                salesCount[item.name] = (salesCount[item.name] || 0) + (parseInt(item.quantity) || 0);
+              }
+            });
+          }
+        });
+        
+        // Sort by sales count
+        const sortedProducts = Object.entries(salesCount)
+          .sort((a, b) => (b[1] || 0) - (a[1] || 0))
+          .slice(0, 5);
+        
+        const topProductsList = document.getElementById('top-products');
+        topProductsList.innerHTML = '';
+        
+        if (sortedProducts.length === 0) {
+          topProductsList.innerHTML = '<div class="empty-state">No sales data yet</div>';
+          document.getElementById('best-seller').textContent = 'N/A';
+          document.getElementById('top-category').textContent = 'N/A';
+          return;
+        }
+        
+        sortedProducts.forEach(([productName, sales], index) => {
+          const li = document.createElement('li');
+          li.className = 'top-product-item';
+          
+          const menuItem = menuItems.find(item => item && item.name === productName);
+          const category = menuItem ? this.getCategoryName(menuItem.category) : 'Unknown';
+          
+          li.innerHTML = `
+            <div class="product-info">
+              <div class="product-rank">${index + 1}</div>
+              <div>
+                <strong>${productName || 'Unknown Item'}</strong>
+                <small>${category}</small>
+              </div>
+            </div>
+            <div class="product-sales">${sales || 0} sold</div>
+          `;
+          
+          topProductsList.appendChild(li);
+        });
+        
+        // Update best seller and top category
+        if (sortedProducts.length > 0) {
+          const bestSeller = sortedProducts[0][0] || 'N/A';
+          document.getElementById('best-seller').textContent = bestSeller;
+          
+          // Find top category
+          const categorySales = {};
+          sortedProducts.forEach(([productName, sales]) => {
+            const menuItem = menuItems.find(item => item && item.name === productName);
+            if (menuItem && menuItem.category) {
+              categorySales[menuItem.category] = (categorySales[menuItem.category] || 0) + (sales || 0);
+            }
+          });
+          
+          const topCategory = Object.entries(categorySales)
+            .sort((a, b) => (b[1] || 0) - (a[1] || 0))[0];
+          
+          if (topCategory && topCategory[0]) {
+            document.getElementById('top-category').textContent = this.getCategoryName(topCategory[0]);
+          } else {
+            document.getElementById('top-category').textContent = 'N/A';
+          }
+        } else {
+          document.getElementById('best-seller').textContent = 'N/A';
+          document.getElementById('top-category').textContent = 'N/A';
+        }
+      },
+
+      // Get category name
+      getCategoryName: function(category) {
+        if (!category) return 'Unknown';
+        
+        const categories = {
+          fruit: 'Fruit Pie',
+          cream: 'Cream Pie',
+          special: 'Specialty Pie'
+        };
+        return categories[category] || 'Unknown';
+      },
+
+      // Update revenue chart
+      updateRevenueChart: function(orders) {
+        const ctx = document.getElementById('revenueChart');
+        if (!ctx) return;
+        
+        // Destroy existing chart if it exists
+        if (window.revenueChartInstance) {
+          window.revenueChartInstance.destroy();
+        }
+        
+        // Get last 7 days revenue
+        const labels = [];
+        const data = [];
+        
+        for (let i = 6; i >= 0; i--) {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+          const dateString = date.toLocaleDateString('en-US', { weekday: 'short' });
+          labels.push(dateString);
+          
+          const dayRevenue = orders
+            .filter(order => {
+              const orderDate = new Date(order.timestamp || new Date()).toDateString();
+              return orderDate === date.toDateString() && 
+                     ['delivered', 'completed'].includes(order.status);
+            })
+            .reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0);
+          
+          data.push(dayRevenue || 0);
+        }
+        
+        window.revenueChartInstance = new Chart(ctx.getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Daily Revenue (₱)',
+              data: data,
+              borderColor: '#8B4513',
+              backgroundColor: 'rgba(139, 69, 19, 0.1)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: 'top'
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: 'rgba(0,0,0,0.05)'
+                },
+                ticks: {
+                  callback: function(value) {
+                    return '₱' + value;
+                  }
+                }
+              },
+              x: {
+                grid: {
+                  color: 'rgba(0,0,0,0.05)'
+                }
+              }
+            }
+          }
+        });
+      },
+
+      // Initialize charts
+      initCharts: function() {
+        const orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+        this.updateRevenueChart(orders);
+      },
+
+      // Load menu items
+      loadMenuItems: function() {
+        const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+        const menuItemsList = document.getElementById('menu-items-list');
+        
+        if (!menuItemsList) return;
+        
+        if (menuItems.length === 0) {
+          menuItemsList.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-utensils"></i>
+              <h3>No Menu Items</h3>
+              <p>Add your first menu item to get started.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        menuItemsList.innerHTML = '';
+        
+        menuItems.forEach(item => {
+          if (!item || !item.id) return;
+          
+          const div = document.createElement('div');
+          div.className = 'menu-item';
+          
+          div.innerHTML = `
+            <div class="menu-item-details">
+              <strong>${item.name || 'Unnamed Item'}</strong>
+              <p>${item.description || 'No description available'}</p>
+              <small>${this.getCategoryName(item.category)} • ₱${(parseFloat(item.price) || 0).toFixed(2)}</small>
+            </div>
+            <div class="item-actions">
+              <button class="btn btn-edit" onclick="adminManager.showEditItemModal('${item.id}')">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn btn-delete" onclick="adminManager.deleteMenuItem('${item.id}')">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          `;
+          
+          menuItemsList.appendChild(div);
+        });
+      },
+
+      // Load accounts
+      loadAccounts: function() {
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const accountsList = document.getElementById('accounts-list');
+        
+        if (!accountsList) return;
+        
+        if (users.length === 0) {
+          accountsList.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-users"></i>
+              <h3>No Accounts</h3>
+              <p>Add your first account to get started.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        accountsList.innerHTML = '';
+        
+        users.forEach(user => {
+          if (!user || !user.id) return;
+          
+          const div = document.createElement('div');
+          div.className = 'account-item';
+          
+          const roleClass = `user-role-badge role-${user.role || 'customer'}`;
+          
+          div.innerHTML = `
+            <div class="account-item-details">
+              <strong>${user.name || 'Unknown User'}</strong>
+              <p>${user.email || 'No email'}</p>
+              <small>${user.phone || 'No phone'} • ${user.address || 'No address'}</small>
+            </div>
+            <div class="account-actions">
+              <span class="${roleClass}">${user.role || 'customer'}</span>
+              <button class="btn btn-edit" onclick="adminManager.showEditAccountModal('${user.id}')">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn btn-delete" onclick="adminManager.deleteAccount('${user.id}')" ${user.role === 'admin' ? 'disabled' : ''}>
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          `;
+          
+          accountsList.appendChild(div);
+        });
+      },
+
+      // Load completed orders
+      loadCompletedOrders: function() {
+        const orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+        const completedOrdersList = document.getElementById('completed-orders-list');
+        
+        if (!completedOrdersList) return;
+        
+        const completedOrders = orders.filter(order => 
+          ['delivered', 'completed'].includes(order.status)
+        ).slice(0, 5); // Show only last 5 orders
+        
+        if (completedOrders.length === 0) {
+          completedOrdersList.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-shopping-cart"></i>
+              <h3>No Completed Orders</h3>
+              <p>No orders have been completed yet.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        completedOrdersList.innerHTML = '';
+        
+        completedOrders.forEach(order => {
+          if (!order || !order.id) return;
+          
+          const div = document.createElement('div');
+          div.className = 'order-card';
+          
+          const itemCount = (order.items || []).reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
+          const orderDate = new Date(order.timestamp || new Date()).toLocaleDateString();
+          
+          div.innerHTML = `
+            <div class="order-header">
+              <div class="order-info">
+                <h4>Order #${(order.id || '').substring(0, 8)}</h4>
+                <div class="order-meta">
+                  ${itemCount} item(s) • ${orderDate}
+                </div>
+              </div>
+              <div class="order-status status-delivered">Delivered</div>
+            </div>
+            <div class="order-items">
+              ${(order.items || []).map(item => `
+                <div class="order-item">
+                  <span>${item.name || 'Unknown Item'} x${item.quantity || 0}</span>
+                  <span>₱${((parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0)).toFixed(2)}</span>
+                </div>
+              `).join('')}
+            </div>
+            <div class="order-footer">
+              <div class="order-total">Total: ₱${(parseFloat(order.total) || 0).toFixed(2)}</div>
+              <div class="order-actions">
+                <button class="btn btn-edit" onclick="adminManager.viewOrderDetails('${order.id}')">
+                  <i class="fas fa-eye"></i> View
+                </button>
+              </div>
+            </div>
+          `;
+          
+          completedOrdersList.appendChild(div);
+        });
+      },
+
+      // View order details
+      viewOrderDetails: function(orderId) {
+        const orders = JSON.parse(localStorage.getItem('customerOrders')) || [];
+        const order = orders.find(o => o && o.id === orderId);
+        
+        if (order) {
+          const items = (order.items || []).map(i => `${i.name || 'Unknown'} x${i.quantity || 0} - ₱${((parseFloat(i.price) || 0) * (parseInt(i.quantity) || 0)).toFixed(2)}`).join('\n');
+          alert(`Order Details:\n\nOrder ID: ${order.id || 'N/A'}\nStatus: ${order.status || 'Unknown'}\nTotal: ₱${(parseFloat(order.total) || 0).toFixed(2)}\nItems:\n${items}`);
+        } else {
+          alert('Order not found!');
+        }
+      },
+
+      // Show add item modal
+      showAddItemModal: function() {
+        const modal = document.getElementById('add-item-modal');
+        if (modal) {
+          modal.style.display = 'flex';
+          
+          // Setup image preview
+          const imageInput = document.getElementById('item-image');
+          const imagePreview = document.getElementById('image-preview');
+          
+          if (imageInput && imagePreview) {
+            imageInput.addEventListener('change', function(e) {
+              const file = e.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                  imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+              }
+            });
+          }
+        }
+      },
+
+      // Show edit item modal
+      showEditItemModal: function(itemId) {
+        const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+        const item = menuItems.find(i => i && i.id === itemId);
+        
+        if (!item) {
+          this.showNotification('Item not found!', 'error');
+          return;
+        }
+        
+        const modal = document.getElementById('edit-item-modal');
+        if (!modal) return;
+        
+        // Fill form with item data
+        document.getElementById('edit-item-id').value = item.id || '';
+        document.getElementById('edit-item-name').value = item.name || '';
+        document.getElementById('edit-item-price').value = parseFloat(item.price) || 0;
+        document.getElementById('edit-item-category').value = item.category || '';
+        document.getElementById('edit-item-description').value = item.description || '';
+        
+        // Show current image if exists
+        const editImagePreview = document.getElementById('edit-image-preview');
+        if (editImagePreview) {
+          if (item.image) {
+            editImagePreview.innerHTML = `<img src="${item.image}" alt="Preview">`;
+          } else {
+            editImagePreview.innerHTML = '<i class="fas fa-image" style="color: #ccc; font-size: 2rem;"></i>';
+          }
+        }
+        
+        // Setup image preview for new image
+        const editImageInput = document.getElementById('edit-item-image');
+        if (editImageInput && editImagePreview) {
+          editImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                editImagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+        
+        modal.style.display = 'flex';
+      },
+
+      // Show add account modal
+      showAddAccountModal: function() {
+        const modal = document.getElementById('add-account-modal');
+        if (modal) {
+          modal.style.display = 'flex';
+        }
+      },
+
+      // Show edit account modal
+      showEditAccountModal: function(userId) {
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const user = users.find(u => u && u.id === userId);
+        
+        if (!user) {
+          this.showNotification('User not found!', 'error');
+          return;
+        }
+        
+        const modal = document.getElementById('edit-account-modal');
+        if (!modal) return;
+        
+        // Fill form with user data
+        document.getElementById('edit-account-id').value = user.id || '';
+        document.getElementById('edit-account-name').value = user.name || '';
+        document.getElementById('edit-account-email').value = user.email || '';
+        document.getElementById('edit-account-role').value = user.role || 'customer';
+        
+        modal.style.display = 'flex';
+      },
+
+      // Close modal
+      closeModal: function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.style.display = 'none';
+          
+          // Reset forms
+          if (modalId === 'add-item-modal') {
+            const form = document.getElementById('add-item-form');
+            if (form) form.reset();
+            const imagePreview = document.getElementById('image-preview');
+            if (imagePreview) imagePreview.innerHTML = '<i class="fas fa-image" style="color: #ccc; font-size: 2rem;"></i>';
+          } else if (modalId === 'edit-item-modal') {
+            const form = document.getElementById('edit-item-form');
+            if (form) form.reset();
+          } else if (modalId === 'add-account-modal') {
+            const form = document.getElementById('add-account-form');
+            if (form) form.reset();
+          } else if (modalId === 'edit-account-modal') {
+            const form = document.getElementById('edit-account-form');
+            if (form) form.reset();
+          }
+        }
+      },
+
+      // Delete menu item
+      deleteMenuItem: function(itemId) {
+        if (confirm('Are you sure you want to delete this menu item?')) {
+          let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+          menuItems = menuItems.filter(item => item && item.id !== itemId);
+          localStorage.setItem('menuItems', JSON.stringify(menuItems));
+          
+          this.showNotification('Menu item deleted successfully!', 'success');
+          this.loadMenuItems();
+          this.loadDashboardData();
+        }
+      },
+
+      // Delete account
+      deleteAccount: function(userId) {
+        if (confirm('Are you sure you want to delete this account?')) {
+          let users = JSON.parse(localStorage.getItem('users')) || [];
+          const user = users.find(u => u && u.id === userId);
+          
+          if (user && user.role === 'admin') {
+            this.showNotification('Cannot delete admin accounts!', 'error');
+            return;
+          }
+          
+          users = users.filter(user => user && user.id !== userId);
+          localStorage.setItem('users', JSON.stringify(users));
+          
+          this.showNotification('Account deleted successfully!', 'success');
+          this.loadAccounts();
+          this.loadDashboardData();
+        }
+      },
+
+      // Setup event listeners
+      setupEventListeners: function() {
+        // Add item form submission
+        const addItemForm = document.getElementById('add-item-form');
+        if (addItemForm) {
+          addItemForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.addMenuItem();
+          });
+        }
+        
+        // Edit item form submission
+        const editItemForm = document.getElementById('edit-item-form');
+        if (editItemForm) {
+          editItemForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.updateMenuItem();
+          });
+        }
+        
+        // Add account form submission
+        const addAccountForm = document.getElementById('add-account-form');
+        if (addAccountForm) {
+          addAccountForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.addAccount();
+          });
+        }
+        
+        // Edit account form submission
+        const editAccountForm = document.getElementById('edit-account-form');
+        if (editAccountForm) {
+          editAccountForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.updateAccount();
+          });
+        }
+      },
+
+      // Add menu item
+      addMenuItem: function() {
+        const name = document.getElementById('item-name')?.value || '';
+        const price = parseFloat(document.getElementById('item-price')?.value) || 0;
+        const category = document.getElementById('item-category')?.value || '';
+        const description = document.getElementById('item-description')?.value || '';
+        const imageInput = document.getElementById('item-image');
+        
+        // Basic validation
+        if (!name || !price || price <= 0 || !category) {
+          this.showNotification('Please fill in all required fields with valid data!', 'error');
+          return;
+        }
+        
+        // Handle image
+        let imageData = 'why pie logo.png'; // Default image
+        
+        if (imageInput && imageInput.files[0]) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            imageData = e.target.result;
+            this.saveMenuItem(name, price, category, description, imageData);
+          };
+          reader.readAsDataURL(imageInput.files[0]);
+        } else {
+          this.saveMenuItem(name, price, category, description, imageData);
+        }
+      },
+
+      // Save menu item
+      saveMenuItem: function(name, price, category, description, image) {
+        let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+        
+        const newItem = {
+          id: 'item_' + Date.now(),
+          name: name || 'Unnamed Item',
+          price: parseFloat(price) || 0,
+          category: category || 'fruit',
+          description: description || 'No description',
+          image: image || 'why pie logo.png',
+          createdAt: new Date().toISOString()
+        };
+        
+        menuItems.push(newItem);
+        localStorage.setItem('menuItems', JSON.stringify(menuItems));
+        
+        this.showNotification('Menu item added successfully!', 'success');
+        this.closeModal('add-item-modal');
+        this.loadMenuItems();
+        this.loadDashboardData();
+      },
+
+      // Update menu item
+      updateMenuItem: function() {
+        const itemId = document.getElementById('edit-item-id')?.value || '';
+        const name = document.getElementById('edit-item-name')?.value || '';
+        const price = parseFloat(document.getElementById('edit-item-price')?.value) || 0;
+        const category = document.getElementById('edit-item-category')?.value || '';
+        const description = document.getElementById('edit-item-description')?.value || '';
+        const imageInput = document.getElementById('edit-item-image');
+        
+        // Basic validation
+        if (!name || !price || price <= 0 || !category) {
+          this.showNotification('Please fill in all required fields with valid data!', 'error');
+          return;
+        }
+        
+        let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+        const itemIndex = menuItems.findIndex(item => item && item.id === itemId);
+        
+        if (itemIndex === -1) {
+          this.showNotification('Item not found!', 'error');
+          return;
+        }
+        
+        // Update item
+        menuItems[itemIndex] = {
+          ...menuItems[itemIndex],
+          name: name || menuItems[itemIndex].name,
+          price: parseFloat(price) || menuItems[itemIndex].price,
+          category: category || menuItems[itemIndex].category,
+          description: description || menuItems[itemIndex].description
+        };
+        
+        // Handle new image if selected
+        if (imageInput && imageInput.files[0]) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            menuItems[itemIndex].image = e.target.result;
+            localStorage.setItem('menuItems', JSON.stringify(menuItems));
+            
+            this.showNotification('Menu item updated successfully!', 'success');
+            this.closeModal('edit-item-modal');
+            this.loadMenuItems();
+            this.loadDashboardData();
+          };
+          reader.readAsDataURL(imageInput.files[0]);
+        } else {
+          localStorage.setItem('menuItems', JSON.stringify(menuItems));
+          
+          this.showNotification('Menu item updated successfully!', 'success');
+          this.closeModal('edit-item-modal');
+          this.loadMenuItems();
+          this.loadDashboardData();
+        }
+      },
+
+      // Add account
+      addAccount: function() {
+        const name = document.getElementById('account-name')?.value || '';
+        const email = document.getElementById('account-email')?.value || '';
+        const password = document.getElementById('account-password')?.value || '';
+        const role = document.getElementById('account-role')?.value || '';
+        
+        // Basic validation
+        if (!name || !email || !password || !role) {
+          this.showNotification('Please fill in all required fields!', 'error');
+          return;
+        }
+        
+        // Check if email already exists
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        if (users.some(user => user && user.email === email)) {
+          this.showNotification('An account with this email already exists!', 'error');
+          return;
+        }
+        
+        const newUser = {
+          id: 'user_' + Date.now(),
+          name: name || 'Unknown User',
+          email: email || '',
+          password: password || '',
+          role: role || 'customer',
+          phone: '',
+          address: '',
+          createdAt: new Date().toISOString()
+        };
+        
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        this.showNotification('Account added successfully!', 'success');
+        this.closeModal('add-account-modal');
+        this.loadAccounts();
+        this.loadDashboardData();
+      },
+
+      // Update account
+      updateAccount: function() {
+        const userId = document.getElementById('edit-account-id')?.value || '';
+        const name = document.getElementById('edit-account-name')?.value || '';
+        const email = document.getElementById('edit-account-email')?.value || '';
+        const password = document.getElementById('edit-account-password')?.value || '';
+        const role = document.getElementById('edit-account-role')?.value || '';
+        
+        // Basic validation
+        if (!name || !email || !role) {
+          this.showNotification('Please fill in all required fields!', 'error');
+          return;
+        }
+        
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        const userIndex = users.findIndex(user => user && user.id === userId);
+        
+        if (userIndex === -1) {
+          this.showNotification('User not found!', 'error');
+          return;
+        }
+        
+        // Check if email already exists (excluding current user)
+        const emailExists = users.some((user, index) => 
+          user && user.email === email && index !== userIndex
+        );
+        
+        if (emailExists) {
+          this.showNotification('An account with this email already exists!', 'error');
+          return;
+        }
+        
+        // Update user
+        users[userIndex].name = name || users[userIndex].name;
+        users[userIndex].email = email || users[userIndex].email;
+        users[userIndex].role = role || users[userIndex].role;
+        
+        // Update password if provided
+        if (password) {
+          users[userIndex].password = password;
+        }
+        
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        this.showNotification('Account updated successfully!', 'success');
+        this.closeModal('edit-account-modal');
+        this.loadAccounts();
+        this.loadDashboardData();
+      },
+
+      // Show notification
+      showNotification: function(message, type) {
+        // Remove existing notification
+        const existingNotification = document.querySelector('.custom-notification');
+        if (existingNotification) {
+          existingNotification.remove();
+        }
+        
+        // Create new notification
+        const notification = document.createElement('div');
+        notification.className = `custom-notification ${type || 'success'}`;
+        notification.textContent = message || 'Notification';
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.remove();
+          }
+        }, 3000);
+      }
+    };
+
+    // Initialize the dashboard when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      adminManager.init();
+    });
+  </script>
+</body>
+</html>

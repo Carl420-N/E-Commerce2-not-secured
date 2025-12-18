@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Buko Langka Pie",
+    "price": 250,
+    "category": "fruit",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkJ1a28gTGFuZ2thIFBpZTwvdGV4dD48L3N2Zz4=",
+    "description": "A delightful combination of young coconut and jackfruit in a flaky crust."
+  },
+  {
+    "id": 2,
+    "name": "Apple Pie",
+    "price": 280,
+    "category": "fruit",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkFwcGxlIFBpZTwvdGV4dD48L3N2Zz4=",
+    "description": "Classic apple pie with a perfect balance of sweet and tart."
+  },
+  {
+    "id": 3,
+    "name": "Egg Pie",
+    "price": 220,
+    "category": "cream",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkVnZyBQaWU8L3RleHQ+PC9zdmc+",
+    "description": "Rich and creamy Filipino-style egg pie with a smooth custard filling."
+  },
+  {
+    "id": 4,
+    "name": "Pumpkin Pie",
+    "price": 260,
+    "category": "special",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlB1bXBraW4gUGllPC90ZXh0Pjwvc3ZnPg==",
+    "description": "Seasonal favorite with smooth spiced pumpkin filling."
+  }
+]

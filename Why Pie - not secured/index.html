@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Why Pie? Bake Good And Treat - Order delicious pies online in Batangas" />
+  <title>Why Pie? Bake Good And Treat - Batangas Online Ordering</title>
+
+  <!-- Font Imports -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Leaflet CSS for Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="print.css" media="print">
+</head>
+<body>
+  <!-- Login Required Modal -->
+  <div class="login-modal" id="login-modal">
+    <div class="login-modal-content">
+      <div class="login-modal-icon">
+        <i class="fas fa-user-lock"></i>
+      </div>
+      <h2>Login Required</h2>
+      <p>You need to be logged in to add items to your cart.</p>
+      <p>Please login or create an account to continue shopping.</p>
+      <div class="modal-actions">
+        <a href="customer-login.html" class="btn btn-primary">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </a>
+        <a href="customer-login.html?tab=signup" class="btn btn-secondary">
+          <i class="fas fa-user-plus"></i> Sign Up
+        </a>
+        <button class="btn btn-outline" onclick="closeLoginModal()">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="nav-container">
+      <div class="logo-container">
+        <img src="why pie logo.png" alt="Why Pie? Logo" class="logo-image">
+        <div class="logo-text">Why Pie? Bake Good And Treat</div>
+      </div>
+
+      <ul class="nav-menu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li id="cart-link">
+          <div class="cart-icon-container">
+            <a href="customer-dashboard.html" class="cart-icon">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="cart-count">0</span>
+            </a>
+          </div>
+        </li>
+        <li id="dashboard-link" style="display: none;">
+          <!-- Dynamically filled based on user role -->
+        </li>
+        <li id="auth-nav">
+          <a href="customer-login.html" class="btn btn-outline">Login</a>
+        </li>
+        <li id="user-nav" style="display: none;">
+          <div class="user-info">
+            <span id="user-name">User</span>
+            <span class="user-role" id="user-role">Customer</span>
+            <a href="customer-login.html" id="logout-btn" class="logout-link">Logout</a>
+          </div>
+        </li>
+      </ul>
+      
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero Slider -->
+    <section id="explore" class="slider">
+      <div class="card active" style="background-image:url('buko-pie-langka.jpg')">
+        <div class="overlay"></div>
+        <div class="details">
+          <h2>Buko Langka Pie</h2>
+          <p>A delightful combination of young coconut and jackfruit in a flaky crust. Our signature pie that captures the taste of the tropics.</p>
+          <a href="#menu" class="btn btn-primary">Order Now</a>
+        </div>
+      </div>
+
+      <div class="card" style="background-image:url('apple-pie.jpeg')">
+        <div class="overlay"></div>
+        <div class="details">
+          <h2>Apple Pie</h2>
+          <p>Classic apple pie with a perfect balance of sweet and tart, featuring tender apples and warm spices in a buttery crust.</p>
+          <a href="#menu" class="btn btn-primary">Order Now</a>
+        </div>
+      </div>
+
+      <div class="card" style="background-image:url('ube-pie.jpg')">
+        <div class="overlay"></div>
+        <div class="details">
+          <h2>Ube Pie</h2>
+          <p>Filipino favorite made with purple yam and creamy filling. A vibrant and delicious treat that's both visually stunning and incredibly tasty.</p>
+          <a href="#menu" class="btn btn-primary">Order Now</a>
+        </div>
+      </div>
+
+      <div class="progress">
+        <div class="progress-bar"></div>
+      </div>
+    </section>
+
+    <!-- Home Section -->
+    <section id="home" class="home">
+      <div class="container">
+        <div class="section-header reveal-element">
+          <h1 class="section-title">Welcome to Why Pie? Bake Good And Treat</h1>
+          <p class="section-subtitle">Indulge in our delicious homemade pies made with the finest ingredients and traditional recipes. From classic favorites to unique creations, we have a pie for every occasion.</p>
+        </div>
+        
+        <div class="featured-dishes reveal-stagger">
+          <div class="dish-card reveal-element">
+            <div class="dish-img-container">
+              <img src="buko-pie-langka.jpg" alt="Buko Langka Pie" class="dish-img">
+            </div>
+            <div class="dish-info">
+              <h3>Buko Langka Pie</h3>
+              <p class="dish-price">₱250</p>
+            </div>
+          </div>
+          <div class="dish-card reveal-element">
+            <div class="dish-img-container">
+              <img src="apple-pie.jpeg" alt="Apple Pie" class="dish-img">
+            </div>
+            <div class="dish-info">
+              <h3>Apple Pie</h3>
+              <p class="dish-price">₱280</p>
+            </div>
+          </div>
+          <div class="dish-card reveal-element">
+            <div class="dish-img-container">
+              <img src="ube-pie.jpg" alt="Ube Pie" class="dish-img">
+            </div>
+            <div class="dish-info">
+              <h3>Ube Pie</h3>
+              <p class="dish-price">₱270</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Menu Section -->
+<section id="menu" class="menu">
+  <div class="container">
+    <div class="section-header reveal-element">
+      <h2 class="section-title">Our Menu</h2>
+      <p class="section-subtitle">Discover our wide selection of delicious pies, made fresh daily with love and care.</p>
+    </div>
+    
+    <div class="menu-filters reveal-element">
+      <button class="filter-btn active" data-filter="all">All Pies</button>
+      <button class="filter-btn" data-filter="fruit">Fruit Pies</button>
+      <button class="filter-btn" data-filter="cream">Cream Pies</button>
+      <button class="filter-btn" data-filter="special">Specialty Pies</button>
+    </div>
+    
+    <div class="menu-grid reveal-stagger" id="menu-grid">
+      <!-- Menu items will be loaded dynamically from localStorage -->
+      <div class="loading-state" style="text-align: center; padding: 3rem; color: #666;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+        <p>Loading menu...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <div class="container">
+        <div class="section-header reveal-element">
+          <h2 class="section-title">About Us</h2>
+          <p class="section-subtitle">Our story of passion, tradition, and delicious pies</p>
+        </div>
+        
+        <div class="about-content">
+          <div class="about-image reveal-element reveal-left">
+            <img src="Bake Shop.png" alt="Our Bakery" class="about-img">
+          </div>
+          <div class="about-text reveal-element reveal-right">
+            <h2>Our Story</h2>
+            <p>Why Pie? Bake Good And Treat started as a small home-based bakery in Mabini, Batangas in 2023. Our founder, Maria Santos, began baking pies for her family and friends using traditional recipes passed down through generations.</p>
+            <p>What began as a passion project quickly grew into a beloved local business as word spread about our delicious, homemade pies. We pride ourselves on using only the freshest ingredients, sourced locally whenever possible.</p>
+            <p>Today, we continue to honor our roots while expanding our menu to include both classic favorites and innovative new creations like our popular Ube Pie. Every pie is made with love and attention to detail, just like you'd make at home.</p>
+            
+            <div class="team">
+              <h2>Our Team</h2>
+              <div class="team-grid reveal-stagger">
+                <div class="team-member reveal-element">
+                  <h4>Carl Niño Lloyd Magtibay</h4>
+                  <p class="team-role">Founder & Head Baker</p>
+                </div>
+                <div class="team-member reveal-element">
+                  <h4>Christian Agena</h4>
+                  <p class="team-role">Pastry Chef</p>
+                </div>
+                <div class="team-member reveal-element">
+                  <h4>Clej Escalona</h4>
+                  <p class="team-role">Assistant Chef</p>
+                </div>
+                <div class="team-member reveal-element">
+                  <h4>Mark Nelson Cantos</h4>
+                  <p class="team-role">Customer Service</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="reviews">
+      <div class="container">
+        <div class="section-header reveal-element">
+          <h2 class="section-title">Customer Reviews</h2>
+          <p class="section-subtitle">What our customers say about our pies</p>
+        </div>
+        
+        <div class="reviews-grid reveal-stagger">
+          <div class="review-card reveal-element">
+            <div class="review-header">
+              <div class="review-info">
+                <h4>Sarah Johnson</h4>
+                <div class="review-stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+            <p class="review-text">"The Buko Langka Pie is absolutely amazing! It tastes just like my grandmother used to make. I order one every week for our family gatherings."</p>
+          </div>
+
+          <div class="review-card reveal-element">
+            <div class="review-header">
+              <div class="review-info">
+                <h4>Michael Tan</h4>
+                <div class="review-stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+            <p class="review-text">"Best egg pie I've ever had! The crust is perfectly flaky and the filling is so creamy. Why Pie? has become our go-to for all celebrations."</p>
+          </div>
+
+          <div class="review-card reveal-element">
+            <div class="review-header">
+              <div class="review-info">
+                <h4>Lisa Garcia</h4>
+                <div class="review-stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+              </div>
+            </div>
+            <p class="review-text">"The Ube Pie is incredible! The purple yam flavor is perfectly balanced and the texture is so smooth. It's become my new favorite!"</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section with Map -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <div class="section-header reveal-element">
+          <h2 class="section-title">Contact Us & Location</h2>
+          <p class="section-subtitle">Visit us or get in touch</p>
+        </div>
+        
+        <!-- Map Section -->
+        <div class="map-container reveal-element">
+          <div id="store-map"></div>
+        </div>
+
+        <!-- Map Features -->
+        <div class="map-features reveal-stagger">
+          <div class="feature-card reveal-element">
+            <div class="feature-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3>Visit Our Store</h3>
+            <p>Come visit us at our main bakery in Mabini, Batangas. Fresh pies baked daily!</p>
+          </div>
+          
+          <div class="feature-card reveal-element">
+            <div class="feature-icon">
+              <i class="fas fa-truck"></i>
+            </div>
+            <h3>Delivery Available</h3>
+            <p>We deliver within Batangas area. Free delivery for orders above ₱500.</p>
+          </div>
+          
+          <div class="feature-card reveal-element">
+            <div class="feature-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h3>Store Hours</h3>
+            <p>Mon-Sat: 8:00 AM - 8:00 PM<br>Sunday: 9:00 AM - 6:00 PM</p>
+          </div>
+        </div>
+
+        <!-- Delivery Zones -->
+        <div class="delivery-zone reveal-element">
+          <h3>Batangas Delivery Areas</h3>
+          <p>We deliver to the following areas in Batangas:</p>
+          <div class="zone-list reveal-stagger">
+            <div class="zone-item reveal-element">Mabini</div>
+            <div class="zone-item reveal-element">Bauan</div>
+            <div class="zone-item reveal-element">San Pascual</div>
+            <div class="zone-item reveal-element">Lipa City</div>
+            <div class="zone-item reveal-element">Batangas City</div>
+            <div class="zone-item reveal-element">Calatagan</div>
+            <div class="zone-item reveal-element">Taal</div>
+            <div class="zone-item reveal-element">Tanauan</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+    <!-- Success Modal -->
+  <div class="modal" id="success-modal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h2>Success!</h2>
+      <p id="success-message">Your order has been placed successfully.</p>
+      <button class="btn btn-primary" onclick="closeModal()">Continue</button>
+    </div>
+  </div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Leaflet JS for Maps -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="auth.js"></script>
+<script src="script.js"></script>
+  <!-- Leaflet JS for Maps -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <script src="script.js"></script>
+  <script src="auth.js"></script>
+<script src="menu-manager.js"></script>
+<!-- Cart Modal -->
+<div class="cart-modal" id="cart-modal">
+    <div class="cart-modal-content">
+        <div class="cart-modal-header">
+            <h2>Your Cart</h2>
+            <button class="close-cart" onclick="closeCartModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cart-modal-items">
+            <!-- Cart items will be loaded here -->
+        </div>
+        <div class="cart-total">
+            <strong>Total: ₱<span id="cart-modal-total">0</span></strong>
+        </div>
+        <div class="cart-actions">
+            <button class="btn btn-primary" onclick="proceedToCheckout()" id="checkout-btn">
+                <i class="fas fa-credit-card"></i> Proceed to Checkout
+            </button>
+            <button class="btn btn-outline" onclick="closeCartModal()">
+                Continue Shopping
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Checkout Confirmation Modal -->
+<div class="modal" id="checkout-modal">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-shopping-bag"></i>
+        </div>
+        <h2>Confirm Checkout</h2>
+        <p>Are you sure you want to proceed with checkout?</p>
+        <div class="modal-actions">
+            <button class="btn btn-primary" onclick="showAddressForm()">
+                Yes, Continue
+            </button>
+            <button class="btn btn-outline" onclick="closeCheckoutModal()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Address Form Modal -->
+<div class="modal" id="address-modal">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <h2>Batangas Delivery Information</h2>
+        <p class="modal-subtitle">Please provide your complete delivery details within Batangas area only</p>
+        
+        <form id="address-form" class="address-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="full-name">Full Name *</label>
+                    <input type="text" id="full-name" name="full-name" required placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="09XXXXXXXXX">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="municipality">Municipality/City *</label>
+                <select id="municipality" name="municipality" required onchange="updateBarangays()">
+                    <option value="">Select your Municipality/City</option>
+                    <option value="Mabini">Mabini</option>
+                    <option value="Bauan">Bauan</option>
+                    <option value="San Pascual">San Pascual</option>
+                    <option value="Lipa City">Lipa City</option>
+                    <option value="Batangas City">Batangas City</option>
+                    <option value="Calatagan">Calatagan</option>
+                    <option value="Taal">Taal</option>
+                    <option value="Tanauan">Tanauan</option>
+                    <option value="Laurel">Laurel</option>
+                    <option value="Nasugbu">Nasugbu</option>
+                    <option value="Balayan">Balayan</option>
+                    <option value="Calaca">Calaca</option>
+                    <option value="Lemery">Lemery</option>
+                    <option value="other">Other Batangas Area</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="barangay">Barangay *</label>
+                    <select id="barangay" name="barangay" required>
+                        <option value="">Select Barangay</option>
+                        <!-- Barangays will be populated dynamically -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="street">Street Name *</label>
+                    <input type="text" id="street" name="street" required placeholder="Street name, Subdivision, Purok">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="landmark">Landmark (Optional)</label>
+                <input type="text" id="landmark" name="landmark" placeholder="e.g., Near the church, beside 7-Eleven, across the school">
+            </div>
+
+            <div class="delivery-note">
+                <i class="fas fa-info-circle"></i>
+                <p><strong>Delivery Area:</strong> We deliver within Batangas area only. Free delivery for orders ₱500 and above.</p>
+            </div>
+        </form>
+        
+        <div class="modal-actions">
+            <button type="button" class="btn btn-primary" onclick="saveAddressAndProceed()" id="continue-payment-btn">
+                <i class="fas fa-arrow-right"></i> Continue to Payment
+            </button>
+            <button type="button" class="btn btn-outline" onclick="closeAddressModal()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Options Modal -->
+<div class="modal" id="payment-modal">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-wallet"></i>
+        </div>
+        <h2>Select Payment Method</h2>
+        <p class="modal-subtitle">Choose how you want to pay for your order</p>
+        
+        <div class="payment-options">
+            <div class="payment-option" onclick="selectPaymentMethod('gcash')">
+                <div class="payment-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <span>GCash</span>
+            </div>
+            <div class="payment-option" onclick="selectPaymentMethod('paymaya')">
+                <div class="payment-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <span>PayMaya</span>
+            </div>
+            <div class="payment-option" onclick="selectPaymentMethod('cod')">
+                <div class="payment-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <span>Cash on Delivery</span>
+            </div>
+        </div>
+        
+        <div class="delivery-note">
+            <i class="fas fa-info-circle"></i>
+            <p>Free delivery for orders ₱500 and above within Batangas area</p>
+        </div>
+        
+        <div class="modal-actions">
+            <button type="button" class="btn btn-outline" onclick="closePaymentModal()">
+                <i class="fas fa-arrow-left"></i> Back to Address
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Confirmation Modal -->
+<div class="modal" id="payment-confirm-modal">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h2>Confirm Payment</h2>
+        <p id="payment-confirm-message">Are you sure you want to pay using GCash?</p>
+        <div class="modal-actions">
+            <button class="btn btn-primary" onclick="processPayment()">
+                Confirm Payment
+            </button>
+            <button class="btn btn-outline" onclick="closePaymentConfirmModal()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Order Success Modal -->
+<div class="modal" id="order-success-modal">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h2>Order Successful!</h2>
+        <div id="receipt-content">
+            <!-- Receipt will be generated here -->
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-primary" onclick="printReceipt()">
+                <i class="fas fa-print"></i> Print Receipt
+            </button>
+            <button class="btn btn-secondary" onclick="continueShopping()">
+                <i class="fas fa-shopping-bag"></i> Continue Shopping
+            </button>
+        </div>
+    </div>
+</div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Why Pie?</h3>
+        <p>Bake Good And Treat - Delicious homemade pies made with love and the finest ingredients. Serving Batangas area since 2023.</p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>Contact Info</h3>
+        <ul class="footer-links">
+          <li><i class="fas fa-map-marker-alt"></i> 123 Pie Street, Mabini, Batangas</li>
+          <li><i class="fas fa-phone"></i> (+63) 927-482-1298</li>
+          <li><i class="fas fa-envelope"></i> orders@whypie.com</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Business Hours</h3>
+        <ul class="footer-links">
+          <li><strong>Monday - Saturday:</strong> 8:00 AM - 8:00 PM</li>
+          <li><strong>Sunday:</strong> 9:00 AM - 6:00 PM</li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2023 Why Pie? Bake Good And Treat. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
